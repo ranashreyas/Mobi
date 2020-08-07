@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'LineChart.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
+import 'keyboard.dart';
+
 
 class Draw extends StatefulWidget {
   @override
@@ -55,6 +57,43 @@ class _DrawState extends State<Draw> {
   double difference = 0;
 
   double totalDistanceStability = 0;
+
+
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+//  static const List<Widget> _widgetOptions = <Widget>[
+//    Text(
+//      'Index 0: Home',
+//      style: optionStyle,
+//    ),
+//    Text(
+//      'Index 1: Business',
+//      style: optionStyle,
+//    ),
+//    Text(
+//      'Index 2: School',
+//      style: optionStyle,
+//    ),
+//  ];
+//
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      if(_selectedIndex==1){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Keyboard()),
+        );
+      } else if(_selectedIndex==0){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Draw()),
+        );
+      }
+    });
+  }
+
 
   void initState(){
     super.initState();
@@ -311,10 +350,10 @@ class _DrawState extends State<Draw> {
                     child: ListView(
                       children: <Widget>[
 
-                        Text("dx, dy " + currDX.round().toString() + ", " + currDY.round().toString(), style: new TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
-                        )),
+//                        Text("dx, dy " + currDX.round().toString() + ", " + currDY.round().toString(), style: new TextStyle(
+//                          fontWeight: FontWeight.bold,
+//                          fontSize: 30,
+//                        )),
 //                        Text(((avgDT/ctrRefresh).toString()) + " dt", style: new TextStyle(
 //                          fontWeight: FontWeight.bold,
 //                          fontSize: 30,
@@ -357,6 +396,25 @@ class _DrawState extends State<Draw> {
       ),
 
 
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            title: Text('Tests'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.keyboard),
+            title: Text("Advanced Keyboard"),
+          ),
+//          BottomNavigationBarItem(
+//            icon: Icon(Icons.school),
+//            title: Text('School'),
+//          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.redAccent,
+        onTap: _onItemTapped,
+      ),
 
     );
   }

@@ -40,7 +40,7 @@ class StartState extends State<Start> {
             ),
             Padding(
               padding: EdgeInsets.all(15),
-                child: Text("Noninvasive Parkinson's Detector", style: new TextStyle(
+                child: Text("MobiTest - Noninvasive Parkinson's Detector", style: new TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 25,
               )),
