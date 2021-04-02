@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pdapp/suggestions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'addWord.dart';
 import 'draw_screen.dart';
 
 class Keyboard extends StatefulWidget {
@@ -87,6 +89,12 @@ class _KeyboardState extends State<Keyboard> {
       await prefs.setStringList("H", dict);
       dict.clear();
 
+      await prefs.setStringList("I", dict);
+
+      await prefs.setStringList("J", dict);
+
+      await prefs.setStringList("K", dict);
+
       dict.add("less 0 0 0");
       dict.add("light-off 0 0 0");
       dict.add("light-on 0 0 0");
@@ -129,6 +137,10 @@ class _KeyboardState extends State<Keyboard> {
       await prefs.setStringList("P", dict);
       dict.clear();
 
+      await prefs.setStringList("Q", dict);
+
+      await prefs.setStringList("R", dict);
+
       dict.add("sad 0 0 0");
       dict.add("scarf 0 0 0");
       dict.add("sleep 0 0 0");
@@ -154,6 +166,10 @@ class _KeyboardState extends State<Keyboard> {
       await prefs.setStringList("T", dict);
       dict.clear();
 
+      await prefs.setStringList("U", dict);
+
+      await prefs.setStringList("V", dict);
+
       dict.add("warm 0 0 0");
       dict.add("wash 0 0 0");
       dict.add("water 0 0 0");
@@ -167,6 +183,8 @@ class _KeyboardState extends State<Keyboard> {
       dict.add("yesterday 0 0 0");
       await prefs.setStringList("Y", dict);
       dict.clear();
+
+      await prefs.setStringList("Z", dict);
     }
   }
 
@@ -237,7 +255,17 @@ class _KeyboardState extends State<Keyboard> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      if(_selectedIndex==1){
+      if(_selectedIndex == 3){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AddWord()),
+        );
+      } else if(_selectedIndex == 2){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Suggestions()),
+        );
+      } else if(_selectedIndex==1){
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => Keyboard()),
@@ -366,10 +394,14 @@ class _KeyboardState extends State<Keyboard> {
               icon: Icon(Icons.keyboard),
               title: Text("Advanced Keyboard"),
             ),
-//          BottomNavigationBarItem(
-//            icon: Icon(Icons.school),
-//            title: Text('School'),
-//          ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list),
+              title: Text("Suggested Words"),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.add),
+              title: Text('Add Word'),
+            ),
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: Colors.redAccent,

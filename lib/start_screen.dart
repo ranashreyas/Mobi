@@ -2,6 +2,7 @@ import 'dart:core';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:pdapp/addWord.dart';
 
 import 'draw_screen.dart';
 
@@ -18,7 +19,7 @@ class StartState extends State<Start> {
     Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-            Draw()), (Route<dynamic> route) => false);
+            AddWord()), (Route<dynamic> route) => false);
       });
     });
   }

@@ -4,9 +4,11 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:pdapp/suggestions.dart';
 import 'LineChart.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
+import 'addWord.dart';
 import 'keyboard.dart';
 
 
@@ -80,7 +82,17 @@ class _DrawState extends State<Draw> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      if(_selectedIndex==1){
+      if(_selectedIndex == 3){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AddWord()),
+        );
+      } else if(_selectedIndex == 2){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Suggestions()),
+        );
+      } else if(_selectedIndex==1){
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => Keyboard()),
@@ -406,10 +418,14 @@ class _DrawState extends State<Draw> {
             icon: Icon(Icons.keyboard),
             title: Text("Advanced Keyboard"),
           ),
-//          BottomNavigationBarItem(
-//            icon: Icon(Icons.school),
-//            title: Text('School'),
-//          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            title: Text("Suggested Words"),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add),
+            title: Text('Add Word'),
+          ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.redAccent,
