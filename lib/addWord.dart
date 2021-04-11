@@ -121,22 +121,27 @@ class _AddWord extends State<AddWord> {
         ),
 
         bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Icon(Icons.library_books, color: Colors.pink.shade100),
               title: Text('Tests'),
+                backgroundColor: Colors.grey[100]
+
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.keyboard),
+              icon: Icon(Icons.keyboard, color: Colors.pink.shade100),
               title: Text("Advanced Keyboard"),
+                backgroundColor: Colors.grey[100]
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.list),
+              icon: Icon(Icons.list, color: Colors.pink.shade100),
               title: Text("Suggested Words"),
+                backgroundColor: Colors.grey[100]
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.add),
+              icon: Icon(Icons.add, color: Colors.redAccent),
               title: Text('Add Word'),
+                backgroundColor: Colors.grey[100]
             ),
           ],
           currentIndex: _selectedIndex,

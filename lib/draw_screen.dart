@@ -45,6 +45,8 @@ class _DrawState extends State<Draw> {
   double prevDX = 0, prevDY = 0;
   double currDX = 0, currDY = 0;
 
+  double currAngle = 0;
+
   Random r = new Random();
   int randomNum = 10;
   bool endedDrawing = false;
@@ -53,12 +55,21 @@ class _DrawState extends State<Draw> {
   var staticHistogram = new List(16);
   var dynamicHistogram = new List(16);
 
+  var staticHistogramAngle = new List(18);
+  var dynamicHistogramAngle = new List(18);
+
   List<GraphPoints> data = new List();
-  List<charts.Series<GraphPoints, int>> temp;
+  List<Angles> angles = new List();
+//  List<charts.Series<GraphPoints, int>> temp;
+  List<charts.Series<Angles, int>> temp;
+
 
   double difference = 0;
 
   double totalDistanceStability = 0;
+
+  double staticSpiralScore = 0;
+  double dynamicSpiralScore = 0;
 
 
   int _selectedIndex = 0;
@@ -114,16 +125,21 @@ class _DrawState extends State<Draw> {
       staticHistogram[x] = 0;
       dynamicHistogram[x] = 0;
     }
+
+    for(int x = 0; x < 18; x++){
+      staticHistogramAngle[x] = 0;
+      dynamicHistogramAngle[x] = 0;
+    }
 //    _instructionsModal(context);
   }
 
-  double standardDeviation(){
-    double variation = 0;
-    for(int x = 0; x < data.length; x++){
-      variation += (data.elementAt(x).acceleration * data.elementAt(x).acceleration).toDouble() / data.length;
-    }
-    return sqrt(variation);
-  }
+//  double standardDeviation(){
+//    double variation = 0;
+//    for(int x = 0; x < data.length; x++){
+//      variation += (data.elementAt(x).acceleration * data.elementAt(x).acceleration).toDouble() / data.length;
+//    }
+//    return sqrt(variation);
+//  }
 
   // the current time, in “seconds since the epoch”
   int currentTimeMS() {
@@ -165,7 +181,7 @@ class _DrawState extends State<Draw> {
               fit: BoxFit.fill
             )
           ): (staticSpiral == 1)?(
-            (randomNum >7)?Container(
+            (randomNum >8)?Container(
               width: MediaQuery.of(context).size.width,
 
               child: FittedBox(
@@ -254,7 +270,7 @@ class _DrawState extends State<Draw> {
 
                       acceleration = (currVelocity - prevVelocity)/(avgDT/ctrRefresh);
                       data.add(new GraphPoints(((currentTime-startTime)).round(), (acceleration*1000000).round()));
-                      print(((currentTime-startTime)).round().toString() + ", " + (acceleration*1000000).round().toString());
+//                      print(((currentTime-startTime)).round().toString() + ", " + (acceleration*1000000).round().toString());
                       previousTime = currentTime;
                       prevVelocity = currVelocity;
 
@@ -271,15 +287,27 @@ class _DrawState extends State<Draw> {
                             ..isAntiAlias = true
                             ..color = selectedColor.withOpacity(opacity)
                             ..strokeWidth = strokeWidth));
+                      if(points.length>=3){
+                        var vectA = [points.elementAt(points.length-3).points.dx-points.elementAt(points.length-2).points.dx,points.elementAt(points.length-3).points.dy-points.elementAt(points.length-2).points.dy];
+                        var vectB = [points.elementAt(points.length-1).points.dx-points.elementAt(points.length-2).points.dx,points.elementAt(points.length-1).points.dy-points.elementAt(points.length-2).points.dy];
+                        var numerator = vectA[0]*vectB[0] + vectA[1]*vectB[1];
+                        var denom = sqrt(vectA[0]*vectA[0] + vectA[1]*vectA[1]) * sqrt(vectB[0]*vectB[0] + vectB[1]*vectB[1]);
+                        denom += 0.000001;
+                        currAngle = 180/3.1415926535897932 * (acos(numerator/denom));
+//                        print(currAngle);
+                        angles.add(new Angles(((currentTime-startTime)).round(), currAngle));
+                      }
+
                     });
                   },
                   onPanStart: (details) {
                     setState(() {
 
-                      print("statusBar + appBar: " + (MediaQuery.of(context).padding.top+60).toString());
+//                      print("statusBar + appBar: " + (MediaQuery.of(context).padding.top+60).toString());
 
                       points.clear();
                       data.clear();
+                      angles.clear();
 
                       prevDX = details.globalPosition.dx;
                       prevDY = details.globalPosition.dy;
@@ -307,24 +335,32 @@ class _DrawState extends State<Draw> {
                   },
                   onPanEnd: (details) {
                     setState(() {
+//                      print("points: " + points.length.toString() + " data: " + data.length.toString());
                       points.clear();
-                      print("end " + totalDistanceStability.toString());
-                      dev = standardDeviation();
+//                      print("end " + totalDistanceStability.toString());
+//                      dev = standardDeviation();
 //                      points.clear();
                       endedDrawing = true;
                       if(staticSpiral == 0){
                         totalDistanceStability = 0;
-                        fillStaticHistogram();
+                        fillStaticHistogramAngles();
                         staticSpiral = 1;
                         randomNum = 10;
                       } else if(staticSpiral == 1){
                         staticSpiral = 2;
-                        fillDynamicHistogram();
+                        fillDynamicHistogramAngles();
 
-                        difference = findDifference();
+//                        difference = findDifference();
+                        staticSpiralScore = calculateStaticSpiralScore();
+                        dynamicSpiralScore = calculateDynamicSpiralScore();
+//                        print(difference);
                         for(int x = 0; x < 16; x++){
                           staticHistogram[x] = 0;
                           dynamicHistogram[x] = 0;
+                        }
+                        for(int x = 0; x < 18; x++){
+                          staticHistogramAngle[x] = 0;
+                          dynamicHistogramAngle[x] = 0;
                         }
 
                       } else {
@@ -332,13 +368,23 @@ class _DrawState extends State<Draw> {
                         //totalDistanceStability = 0;
 
                       }
+//                      temp = [
+//                        new charts.Series<GraphPoints, int>(
+//                          id: 'Sales',
+//                          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+//                          domainFn: (GraphPoints x, _) => x.time,
+//                          measureFn: (GraphPoints x, _) => x.acceleration,
+//                          data: data,
+//                        )
+//                      ];
+//                      points.add(null);
                       temp = [
-                        new charts.Series<GraphPoints, int>(
+                        new charts.Series<Angles, int>(
                           id: 'Sales',
                           colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-                          domainFn: (GraphPoints x, _) => x.time,
-                          measureFn: (GraphPoints x, _) => x.acceleration,
-                          data: data,
+                          domainFn: (Angles x, _) => x.time,
+                          measureFn: (Angles x, _) => x.angle,
+                          data: angles,
                         )
                       ];
                       points.add(null);
@@ -361,6 +407,14 @@ class _DrawState extends State<Draw> {
                 child: Center(
                     child: ListView(
                       children: <Widget>[
+//                        Text("Angle " + (currAngle==double.nan).toString(), style: new TextStyle(
+//                          fontWeight: FontWeight.bold,
+//                          fontSize: 30,
+//                        )),
+//                        Text("Angle " + currAngle.round().toString(), style: new TextStyle(
+//                          fontWeight: FontWeight.bold,
+//                          fontSize: 30,
+//                        )),
 
 //                        Text("dx, dy " + currDX.round().toString() + ", " + currDY.round().toString(), style: new TextStyle(
 //                          fontWeight: FontWeight.bold,
@@ -382,9 +436,13 @@ class _DrawState extends State<Draw> {
 //                          fontWeight: FontWeight.bold,
 //                          fontSize: 30,
 //                        )),
-                        Text("Spiral Test Results: " + difference.round().toString() + "%", style: new TextStyle(
+                        Text("Static Spiral Test Results: " + staticSpiralScore.round().toString() + "%", style: new TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 30,
+                          fontSize: 25,
+                        )),
+                        Text("Dynamic Spiral Test Results: " + dynamicSpiralScore.round().toString() + "%", style: new TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25,
                         )),
                         Text("Stability Test Results: " + totalDistanceStability.round().toString(), style: new TextStyle(
                           fontWeight: FontWeight.bold,
@@ -409,22 +467,26 @@ class _DrawState extends State<Draw> {
 
 
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.library_books, color: Colors.redAccent),
             title: Text('Tests'),
+            backgroundColor: Colors.grey[100]
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.keyboard),
+            icon: Icon(Icons.keyboard, color: Colors.pink.shade100),
             title: Text("Advanced Keyboard"),
+              backgroundColor: Colors.grey[100]
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.list),
+            icon: Icon(Icons.list, color: Colors.pink.shade100),
             title: Text("Suggested Words"),
+              backgroundColor: Colors.grey[100]
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add),
+            icon: Icon(Icons.add, color: Colors.pink.shade100),
             title: Text('Add Word'),
+            backgroundColor: Colors.grey[100]
           ),
         ],
         currentIndex: _selectedIndex,
@@ -435,41 +497,95 @@ class _DrawState extends State<Draw> {
     );
   }
 
-  void fillStaticHistogram() {
-    for(int x = 0; x < data.length; x++) {
-      for (int y = 0; y < 16; y++) {
-        if (data
-            .elementAt(x)
-            .acceleration < -50000 + 6250 * (y + 1) && data.elementAt(x).acceleration > -100000) {
-          staticHistogram[y]++;
+//  void fillStaticHistogram() {
+//    for(int x = 0; x < data.length; x++) {
+//      for (int y = 0; y < 16; y++) {
+//        if (data.elementAt(x).acceleration < -50000 + 6250 * (y + 1) && data.elementAt(x).acceleration > -100000) {
+//          staticHistogram[y]++;
+//          break;
+//        }
+//      }
+//    }
+//    print(staticHistogram);
+//  }
+
+  void fillStaticHistogramAngles() {
+    for(int x = 0; x < angles.length; x++) {
+      for (int y = 0; y < 18; y++) {
+        if (angles.elementAt(x).angle < 0 + 10 * (y + 1) && angles.elementAt(x).angle > 0) {
+          staticHistogramAngle[y]++;
           break;
         }
       }
     }
-    print(staticHistogram);
+    for(int i = 0; i < 18; i++){
+      staticHistogramAngle[i] = staticHistogramAngle[i]/angles.length;
+    }
+    print(staticHistogramAngle);
   }
 
-  void fillDynamicHistogram() {
-    for(int x = 0; x < data.length; x++) {
-      for (int y = 0; y < 16; y++) {
-        if (data
-            .elementAt(x)
-            .acceleration < -50000 + 6250 * (y + 1) && data.elementAt(x).acceleration > -100000) {
-          dynamicHistogram[y]++;
+//  void fillDynamicHistogram() {
+//    for(int x = 0; x < data.length; x++) {
+//      for (int y = 0; y < 16; y++) {
+//        if (data
+//            .elementAt(x)
+//            .acceleration < -50000 + 6250 * (y + 1) && data.elementAt(x).acceleration > -100000) {
+//          dynamicHistogram[y]++;
+//          break;
+//        }
+//      }
+//    }
+//    print(dynamicHistogram);
+//  }
+
+  void fillDynamicHistogramAngles() {
+    for(int x = 0; x < angles.length; x++) {
+      for (int y = 0; y < 18; y++) {
+        if (angles.elementAt(x).angle < 0 + 10 * (y + 1) && angles.elementAt(x).angle > 0) {
+          dynamicHistogramAngle[y]++;
           break;
         }
       }
     }
-    print(dynamicHistogram);
+    for(int i = 0; i < 18; i++){
+      dynamicHistogramAngle[i] = dynamicHistogramAngle[i]/angles.length;
+    }
+    print(dynamicHistogramAngle);
   }
 
-  double findDifference() {
-    int sum = 0;
-    for(int x = 0; x < 16; x++){
-      sum += (staticHistogram.elementAt(x) - dynamicHistogram.elementAt(x))*
-          (staticHistogram.elementAt(x) - dynamicHistogram.elementAt(x));
+//  double findDifference() {
+//    int sum = 0;
+//    for(int x = 0; x < 16; x++){
+//      sum += (staticHistogram.elementAt(x) - dynamicHistogram.elementAt(x))*
+//          (staticHistogram.elementAt(x) - dynamicHistogram.elementAt(x));
+//    }
+//    return (sqrt(sum)/MediaQuery.of(context).size.width * 100)/500 * 100;
+//  }
+//  double findDifferenceAngle() {
+//    double sum = 0;
+//    for(int x = 0; x < 18; x++){
+//      sum += (18-x + 1)*100 * (staticHistogramAngle.elementAt(x) - dynamicHistogramAngle.elementAt(x))*
+//          (staticHistogramAngle.elementAt(x) - dynamicHistogramAngle.elementAt(x));
+//    }
+//    return sum;
+//  }
+
+  double calculateStaticSpiralScore(){
+    double sum = 0;
+    for(int x = 0; x < 18; x++){
+      sum += (17-x)*1000 * (staticHistogramAngle.elementAt(x))*
+          (staticHistogramAngle.elementAt(x));
     }
-    return (sqrt(sum)/MediaQuery.of(context).size.width * 100)/500 * 100;
+    return sum;
+  }
+
+  double calculateDynamicSpiralScore(){
+    double sum = 0;
+    for(int x = 0; x < 18; x++){
+      sum += (17-x)*1000 * (dynamicHistogramAngle.elementAt(x))*
+          (dynamicHistogramAngle.elementAt(x));
+    }
+    return sum;
   }
 
   void _instructionsModal(context) {
@@ -481,7 +597,7 @@ class _DrawState extends State<Draw> {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text("This app will use three tests to gauge the severity of Parkinson's Disease. The next test will automatically change once the current one is finished.", style: new TextStyle(
+              child: Text("This app will use three tests to gauge the severity of Parkinson's Disease. The next test will automatically change once the current one is finished. The spiral tests will determine the finger's tremor, and the stability test will test the finger's controll.", style: new TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
               )),
@@ -510,7 +626,7 @@ class _DrawState extends State<Draw> {
 
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text("At the end of each test, a graph will be generated showing the speed of your finger per unit time. The closer the curve is to zero, the better.", style: new TextStyle(
+              child: Text("At the end of each test, a graph will be generated showing the overall curvature of your tracing. The closer the curve is to 180 degrees, the smoother the curve was.", style: new TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
               )),
@@ -595,6 +711,13 @@ class GraphPoints {
   final int acceleration;
 
   GraphPoints(this.time, this.acceleration);
+}
+
+class Angles {
+  final int time;
+  final double angle;
+
+  Angles(this.time, this.angle);
 }
 
 enum SelectedMode { StrokeWidth, Opacity, Color }

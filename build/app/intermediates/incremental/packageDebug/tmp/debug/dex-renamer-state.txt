@@ -1,0 +1,4 @@
+#Sun Apr 11 13:37:08 PDT 2021
+base.0=/Users/frogman/Desktop/Shreyas/Programming/pd_app/build/app/intermediates/transforms/dexMerger/debug/0
+path.0=classes.dex
+renamed.0=classes.dex

@@ -19,7 +19,7 @@ class StartState extends State<Start> {
     Future.delayed(const Duration(milliseconds: 2000), (){
       setState(() {
         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-            AddWord()), (Route<dynamic> route) => false);
+            Draw()), (Route<dynamic> route) => false);
       });
     });
   }
