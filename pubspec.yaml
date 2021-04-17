@@ -47,6 +47,7 @@ flutter:
   assets:
     - images/spiral.jpeg
     - images/pdlogo.jpeg
+    - images/MobiTestLogo.jpeg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

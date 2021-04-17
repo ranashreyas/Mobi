@@ -388,7 +388,7 @@ class _KeyboardState extends State<Keyboard> {
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.library_books, color: Colors.pink.shade100),
-              title: Text('Tests'),
+              title: Text('Mobility Tests'),
               backgroundColor: Colors.grey[100]
             ),
             BottomNavigationBarItem(

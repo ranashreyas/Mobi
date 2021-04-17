@@ -27,25 +27,25 @@ class StartState extends State<Start> {
   Widget build(BuildContext context){
     return Scaffold(
 
-      backgroundColor: Colors.cyan[100],
+      backgroundColor: Colors.cyan[50],
 
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.asset("images/pdlogo.jpeg",
-              height: 300,
-              width: 200,
-              fit: BoxFit.fitWidth,
+            Image.asset("images/MobiTestLogo.jpeg",
+              height: MediaQuery.of(context).size.width * 0.7,
+              width: MediaQuery.of(context).size.width * 0.7,
+//              fit: BoxFit.fitWidth,
             ),
-            Padding(
-              padding: EdgeInsets.all(15),
-                child: Text("MobiTest - Noninvasive Parkinson's Detector", style: new TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 25,
-              )),
-            ),
+//            Padding(
+//              padding: EdgeInsets.all(15),
+//                child: Text("MobiTest - Noninvasive Parkinson's Detector", style: new TextStyle(
+//                fontWeight: FontWeight.bold,
+//                fontSize: 25,
+//              )),
+//            ),
           ],
         )
       ),

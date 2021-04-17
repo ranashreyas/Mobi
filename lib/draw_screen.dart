@@ -157,7 +157,7 @@ class _DrawState extends State<Draw> {
               fontWeight: FontWeight.bold,
               fontSize: 35,
             )),
-            backgroundColor: Colors.pink[100],
+            backgroundColor: Colors.cyan[100],
             actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.info, color: Colors.blueAccent, size: 30),
@@ -402,9 +402,10 @@ class _DrawState extends State<Draw> {
 
               Flexible(
                 child: Container(
-                color: Colors.pink[100],
+                color: Colors.cyan[100],
 //                height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.width-0,
                 child: Center(
+
                     child: ListView(
                       children: <Widget>[
 //                        Text("Angle " + (currAngle==double.nan).toString(), style: new TextStyle(
@@ -436,18 +437,29 @@ class _DrawState extends State<Draw> {
 //                          fontWeight: FontWeight.bold,
 //                          fontSize: 30,
 //                        )),
-                        Text("Static Spiral Test Results: " + staticSpiralScore.round().toString() + "%", style: new TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25,
-                        )),
-                        Text("Dynamic Spiral Test Results: " + dynamicSpiralScore.round().toString() + "%", style: new TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25,
-                        )),
-                        Text("Stability Test Results: " + totalDistanceStability.round().toString(), style: new TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30,
-                        )),
+                        Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Text("Static Spiral Test Results: " + staticSpiralScore.round().toString() + "%", style: new TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25,
+                          )),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Text("Dynamic Spiral Test Results: " + dynamicSpiralScore.round().toString() + "%", style: new TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25,
+                          )),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Text("Stability Test Results: " + totalDistanceStability.round().toString(), style: new TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30,
+                          )),
+                        ),
+
+
                         (endedDrawing)? Container(
                           height: 200,
                           child: LineChart(temp),
@@ -469,28 +481,28 @@ class _DrawState extends State<Draw> {
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.library_books, color: Colors.redAccent),
-            title: Text('Tests'),
+            icon: Icon(Icons.library_books, color: Colors.cyan[200]),
+            title: Text('Mobility Tests'),
             backgroundColor: Colors.grey[100]
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.keyboard, color: Colors.pink.shade100),
+            icon: Icon(Icons.keyboard, color: Colors.cyan[200]),
             title: Text("Advanced Keyboard"),
               backgroundColor: Colors.grey[100]
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.list, color: Colors.pink.shade100),
+            icon: Icon(Icons.list, color: Colors.cyan[200]),
             title: Text("Suggested Words"),
               backgroundColor: Colors.grey[100]
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add, color: Colors.pink.shade100),
+            icon: Icon(Icons.add, color: Colors.cyan[200]),
             title: Text('Add Word'),
             backgroundColor: Colors.grey[100]
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.redAccent,
+        selectedItemColor: Colors.cyan[200],
         onTap: _onItemTapped,
       ),
 
