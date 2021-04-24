@@ -4,12 +4,18 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:pdapp/BottomNavBar.dart';
+import 'package:pdapp/Statistics.dart';
 import 'package:pdapp/suggestions.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:sqflite/sqlite_api.dart';
 import 'LineChart.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 import 'addWord.dart';
 import 'keyboard.dart';
+
+import 'package:flutter/services.dart';
 
 
 class Draw extends StatefulWidget {
@@ -72,55 +78,13 @@ class _DrawState extends State<Draw> {
   double dynamicSpiralScore = 0;
 
 
-  int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-//  static const List<Widget> _widgetOptions = <Widget>[
-//    Text(
-//      'Index 0: Home',
-//      style: optionStyle,
-//    ),
-//    Text(
-//      'Index 1: Business',
-//      style: optionStyle,
-//    ),
-//    Text(
-//      'Index 2: School',
-//      style: optionStyle,
-//    ),
-//  ];
-//
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      if(_selectedIndex == 3){
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => AddWord()),
-        );
-      } else if(_selectedIndex == 2){
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Suggestions()),
-        );
-      } else if(_selectedIndex==1){
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Keyboard()),
-        );
-      } else if(_selectedIndex==0){
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Draw()),
-        );
-      }
-    });
-  }
-
 
   void initState(){
     super.initState();
-//    print(MediaQuery.of(context).padding.top+60);
+
+    staticSpiralScore = 0.0;
+    dynamicSpiralScore = 0.0;
+
     for(int x = 0; x < 16; x++){
       staticHistogram[x] = 0;
       dynamicHistogram[x] = 0;
@@ -149,7 +113,12 @@ class _DrawState extends State<Draw> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+//      DeviceOrientation.portraitDown,
+    ]);
     return Scaffold(
+      extendBody: true,
       appBar: PreferredSize(
           child: AppBar(
             title: Text((staticSpiral == 0)? "Static Spiral Test":(staticSpiral == 1)? "Dynamic Spiral Test": "Stability Test", style: new TextStyle(
@@ -174,6 +143,7 @@ class _DrawState extends State<Draw> {
 
           //determining whether to do static/dynamic/stability
           (staticSpiral == 0)? Container(
+            margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
             width: MediaQuery.of(context).size.width,
 
             child: FittedBox(
@@ -182,6 +152,7 @@ class _DrawState extends State<Draw> {
             )
           ): (staticSpiral == 1)?(
             (randomNum >8)?Container(
+              margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
               width: MediaQuery.of(context).size.width,
 
               child: FittedBox(
@@ -437,26 +408,59 @@ class _DrawState extends State<Draw> {
 //                          fontWeight: FontWeight.bold,
 //                          fontSize: 30,
 //                        )),
-                        Padding(
+                        ((staticSpiral == 0)?
+                        (Padding(
                           padding: EdgeInsets.all(5.0),
                           child: Text("Static Spiral Test Results: " + staticSpiralScore.round().toString() + "%", style: new TextStyle(
+                            color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 25,
                           )),
-                        ),
-                        Padding(
+                        )) : Container()),
+
+                        ((staticSpiral == 0)?
+                        (Padding(
                           padding: EdgeInsets.all(5.0),
                           child: Text("Dynamic Spiral Test Results: " + dynamicSpiralScore.round().toString() + "%", style: new TextStyle(
+                            color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 25,
                           )),
-                        ),
-                        Padding(
+                        )) : Container()),
+
+                        ((staticSpiral == 0)?
+                        (Padding(
                           padding: EdgeInsets.all(5.0),
                           child: Text("Stability Test Results: " + totalDistanceStability.round().toString(), style: new TextStyle(
+                            color: Colors.black,
                             fontWeight: FontWeight.bold,
-                            fontSize: 30,
+                            fontSize: 25,
                           )),
+                        )) : Container()),
+
+
+                        Container(
+                            margin: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 3,
+                              ),
+                            ),
+                            child: FlatButton(
+                              splashColor: Colors.cyan[100],
+                              child: Center(
+                                  child: Text("Start Over", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
+                              ),
+                              onPressed: (){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => Draw()),
+                                );
+                              },
+                            )
                         ),
 
 
@@ -477,34 +481,16 @@ class _DrawState extends State<Draw> {
         ],
       ),
 
-
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.library_books, color: Colors.cyan[200]),
-            title: Text('Mobility Tests'),
-            backgroundColor: Colors.grey[100]
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.keyboard, color: Colors.cyan[200]),
-            title: Text("Advanced Keyboard"),
-              backgroundColor: Colors.grey[100]
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list, color: Colors.cyan[200]),
-            title: Text("Suggested Words"),
-              backgroundColor: Colors.grey[100]
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add, color: Colors.cyan[200]),
-            title: Text('Add Word'),
-            backgroundColor: Colors.grey[100]
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.cyan[200],
-        onTap: _onItemTapped,
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.show_chart),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Statistics()));
+        },
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomNavBar(),
 
     );
   }
@@ -609,21 +595,21 @@ class _DrawState extends State<Draw> {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text("This app will use three tests to gauge the severity of Parkinson's Disease. The next test will automatically change once the current one is finished. The spiral tests will determine the finger's tremor, and the stability test will test the finger's controll.", style: new TextStyle(
+              child: Text("This app will use three tests to gauge the severity of Parkinson's Disease. The test will automatically switch once the current test is finished. The spiral tests will determine the finger's tremor, and the stability test will test the finger's control.", style: new TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
               )),
             ),
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text("1. Static Spiral Test: Starting from the right side, trace the spiral until the center.", style: new TextStyle(
+              child: Text("1. Static Spiral Test: Starting from the right side, trace the spiral towards the center.", style: new TextStyle(
                 fontWeight: FontWeight.normal,
                 fontSize: 20,
               )),
             ),
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text("2. Dynamic Spiral test: Similar to the Static Spiral Test, except the spiral flashes on and off to increase difficulty.", style: new TextStyle(
+              child: Text("2. Dynamic Spiral test: This test is similar to the Static Spiral Test, except that the spiral flashes on and off to increase difficulty.", style: new TextStyle(
                 fontWeight: FontWeight.normal,
                 fontSize: 20,
               )),
@@ -638,7 +624,7 @@ class _DrawState extends State<Draw> {
 
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text("At the end of each test, a graph will be generated showing the overall curvature of your tracing. The closer the curve is to 180 degrees, the smoother the curve was.", style: new TextStyle(
+              child: Text("At the end of each test, a graph will be generated showing the overall curvature of your tracing. A curve closer to 180 degrees demonstrates the best control and stability.", style: new TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
               )),
@@ -646,7 +632,7 @@ class _DrawState extends State<Draw> {
 
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text("The score for each test will be visible after all three tests have been finished. The closer each result is to zero, the lesser severity of Parkinson's you have.", style: new TextStyle(
+              child: Text("The score for each test will be visible after all three tests have been finished. Results closer to zero demonstrate that the possibility of Parkinson's is low.", style: new TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
               )),

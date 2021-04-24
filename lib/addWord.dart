@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:pdapp/suggestions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'BottomNavBar.dart';
+import 'Statistics.dart';
 import 'draw_screen.dart';
 import 'keyboard.dart';
 
@@ -24,33 +26,6 @@ class _AddWord extends State<AddWord> {
     super.initState();
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      if(_selectedIndex == 3){
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => AddWord()),
-        );
-      } else if(_selectedIndex == 2){
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Suggestions()),
-        );
-      } else if(_selectedIndex==1){
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Keyboard()),
-        );
-      } else if(_selectedIndex==0){
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Draw()),
-        );
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -63,7 +38,7 @@ class _AddWord extends State<AddWord> {
               fontWeight: FontWeight.bold,
               fontSize: 25,
             )),
-            backgroundColor: Colors.pink[100],
+            backgroundColor: Colors.cyan[100],
             actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.info, color: Colors.blueAccent, size: 30),
@@ -102,7 +77,7 @@ class _AddWord extends State<AddWord> {
                 ),
               ),
               child: FlatButton(
-                splashColor: Colors.pink[100],
+                splashColor: Colors.cyan[100],
                 child: Center(
                     child: Text("Add Word", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
                 ),
@@ -120,34 +95,16 @@ class _AddWord extends State<AddWord> {
           ],
         ),
 
-        bottomNavigationBar: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.library_books, color: Colors.pink.shade100),
-              title: Text('Mobility Tests'),
-                backgroundColor: Colors.grey[100]
-
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.keyboard, color: Colors.pink.shade100),
-              title: Text("Advanced Keyboard"),
-                backgroundColor: Colors.grey[100]
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list, color: Colors.pink.shade100),
-              title: Text("Suggested Words"),
-                backgroundColor: Colors.grey[100]
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.add, color: Colors.redAccent),
-              title: Text('Add Word'),
-                backgroundColor: Colors.grey[100]
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.redAccent,
-          onTap: _onItemTapped,
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.show_chart),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Statistics()));
+          },
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: BottomNavBar(),
       )
     );
   }

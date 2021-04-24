@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:pdapp/suggestions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'BottomNavBar.dart';
+import 'Statistics.dart';
 import 'addWord.dart';
 import 'draw_screen.dart';
 
@@ -207,7 +209,7 @@ class _KeyboardState extends State<Keyboard> {
           onPressed: (){
             print(words.elementAt(x).split(" ")[0]);
           },
-          splashColor: Colors.pink[100],
+          splashColor: Colors.cyan[100],
           child: Center(
             child: Text(words.elementAt(x).split(" ")[0], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           )
@@ -235,7 +237,7 @@ class _KeyboardState extends State<Keyboard> {
           ),
         ),
         child: FlatButton(
-          splashColor: Colors.pink[100],
+          splashColor: Colors.cyan[100],
           child: Center(
               child: Text(name, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
           ),
@@ -251,34 +253,6 @@ class _KeyboardState extends State<Keyboard> {
     );
   }
 
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      if(_selectedIndex == 3){
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => AddWord()),
-        );
-      } else if(_selectedIndex == 2){
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Suggestions()),
-        );
-      } else if(_selectedIndex==1){
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Keyboard()),
-        );
-      } else if(_selectedIndex==0){
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Draw()),
-        );
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -288,20 +262,20 @@ class _KeyboardState extends State<Keyboard> {
 
         appBar: PreferredSize(
           child: AppBar(
-            title: Text("Advanced Keyboard", style: new TextStyle(
+            title: Text("Accesible Keyboard", style: new TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: 25,
             )),
-            backgroundColor: Colors.pink[100],
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.info, color: Colors.blueAccent, size: 30),
-                onPressed: (){
-                  //_instructionsModal(context);
-                },
-              )
-            ],
+            backgroundColor: Colors.cyan[100],
+//            actions: <Widget>[
+//              IconButton(
+//                icon: Icon(Icons.info, color: Colors.blueAccent, size: 30),
+//                onPressed: (){
+//                  //_instructionsModal(context);
+//                },
+//              )
+//            ],
           ),
           preferredSize: Size.fromHeight(60),
         ),
@@ -383,34 +357,16 @@ class _KeyboardState extends State<Keyboard> {
         ),
 
 
-
-        bottomNavigationBar: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.library_books, color: Colors.pink.shade100),
-              title: Text('Mobility Tests'),
-              backgroundColor: Colors.grey[100]
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.keyboard, color: Colors.redAccent),
-              title: Text("Advanced Keyboard"),
-                backgroundColor: Colors.grey[100]
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list, color: Colors.pink.shade100),
-              title: Text("Suggested Words"),
-                backgroundColor: Colors.grey[100]
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.add, color: Colors.pink.shade100),
-              title: Text('Add Word'),
-                backgroundColor: Colors.grey[100]
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.redAccent,
-          onTap: _onItemTapped,
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.show_chart),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Statistics()));
+          },
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: BottomNavBar()
       ),
     );
   }
