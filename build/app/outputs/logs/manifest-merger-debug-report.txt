@@ -27,7 +27,7 @@ INJECTED from /Users/frogman/Desktop/Shreyas/Programming/pd_app/android/app/src/
 application
 ADDED from /Users/frogman/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:9:5-32:19
 	android:label
-		ADDED from /Users/frogman/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:11:9-30
+		ADDED from /Users/frogman/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:11:9-33
 	android:icon
 		ADDED from /Users/frogman/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:12:9-43
 	android:name

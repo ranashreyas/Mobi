@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="16"
-        android:targetSdkVersion="28" />
+        android:targetSdkVersion="29" />
     <!--
          Flutter needs it to communicate with the running application
          to allow setting breakpoints, to provide hot reload, etc.
@@ -23,7 +23,7 @@
         android:name="io.flutter.app.FlutterApplication"
         android:debuggable="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="pdapp" >
+        android:label="MobiTest" >
         <activity
             android:name="com.covidassistant.pdapp.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

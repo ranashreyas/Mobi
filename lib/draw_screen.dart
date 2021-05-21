@@ -481,15 +481,15 @@ class _DrawState extends State<Draw> {
         ],
       ),
 
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.show_chart),
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Statistics()));
-        },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+//      floatingActionButton: FloatingActionButton(
+//        child: Icon(Icons.show_chart),
+//        onPressed: () {
+//          Navigator.push(
+//              context,
+//              MaterialPageRoute(builder: (context) => Statistics()));
+//        },
+//      ),
+//      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavBar(),
 
     );

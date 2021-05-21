@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "/Users/frogman/Desktop/Shreyas/Programming/pd_app/build/app/intermediates/res/merged/release/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "/Users/frogman/Desktop/Shreyas/Programming/pd_app/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/frogman/Desktop/Shreyas/Programming/pd_app/build/app/intermediates/res/merged/release/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "/Users/frogman/Desktop/Shreyas/Programming/pd_app/android/app/src/main/res/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/frogman/Desktop/Shreyas/Programming/pd_app/build/app/intermediates/res/merged/release/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "/Users/frogman/Desktop/Shreyas/Programming/pd_app/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/frogman/Desktop/Shreyas/Programming/pd_app/build/app/intermediates/res/merged/release/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "/Users/frogman/Desktop/Shreyas/Programming/pd_app/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/frogman/Desktop/Shreyas/Programming/pd_app/build/app/intermediates/res/merged/release/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "/Users/frogman/Desktop/Shreyas/Programming/pd_app/android/app/src/main/res/mipmap-hdpi/ic_launcher.png"
+    }
+]
