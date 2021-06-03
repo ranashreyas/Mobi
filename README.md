@@ -12,7 +12,12 @@ Another unique feature that this app provides is an Accessible Keyboard. This ke
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is a Flutter application. To build this project, follow these steps:
+
+1. Clone this repo
+2. Download, install and configure Android Studio
+3. Install Flutter and Dart plugins in Android Studio
+4. Open the project
 
 A few resources to get you started if this is your first Flutter project:
 
