@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pdapp/suggestions.dart';
@@ -15,181 +17,170 @@ class Keyboard extends StatefulWidget {
 
 class _KeyboardState extends State<Keyboard> {
 
-  int _selectedIndex = 1;
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   List<String> _wordList = new List();
   List<Widget> _widgetWords = new List();
 
+  Map<String, Map<String, int>> markovModel = new Map();
+  String previousWord;
+
   @override
-  Future initState() {
+  void initState() {
     // TODO: implement initState
     super.initState();
-    _createSharedPrefs();
+    _createSharedPrefs().then((onValue){
+      print(markovModel);
+    });
+
+
   }
+
 
 
   Future _createSharedPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if(!prefs.containsKey("A")) {
-      List<String> dict = new List();
-      dict.add("ac-high 0 0 0");
-      dict.add("ac-low 0 0 0");
-      dict.add("ac-off 0 0 0");
-      dict.add("ac-on 0 0 0");
-      dict.add("airbed 0 0 0");
-      await prefs.setStringList("A", dict);
-      dict.clear();
+    List<String> dict = new List();
+    if(!prefs.containsKey("All_Words")){
+      dict.add("ac-high");
+      dict.add("ac-low");
+      dict.add("ac-off");
+      dict.add("ac-on");
+      dict.add("airbed");
+      dict.add("bathroom");
+      dict.add("bed-down");
+      dict.add("breathing-prob");
+      dict.add("bed");
+      dict.add("chair");
+      dict.add("change");
+      dict.add("clean");
+      dict.add("clothes");
+      dict.add("cold");
+      dict.add("cream");
+      dict.add("crushed");
+      dict.add("dressing");
+      dict.add("drink");
+      dict.add("dry");
+      dict.add("dining-room");
+      dict.add("eat");
+      dict.add("fan-fast");
+      dict.add("fan-off");
+      dict.add("fan-on");
+      dict.add("fan-slow");
+      dict.add("fell");
+      dict.add("fresh");
+      dict.add("full");
+      dict.add("gate");
+      dict.add("half");
+      dict.add("hand");
+      dict.add("happy");
+      dict.add("hospital");
+      dict.add("hurt");
+      dict.add("less");
+      dict.add("light-off");
+      dict.add("light-on");
+      dict.add("massage");
+      dict.add("medicine");
+      dict.add("medicine-pain");
+      dict.add("more");
+      dict.add("mouth");
+      dict.add("mouth-wash");
+      dict.add("music");
+      dict.add("news");
+      dict.add("nose");
+      dict.add("not");
+      dict.add("not-hungry");
+      dict.add("number");
+      dict.add("off");
+      dict.add("oil");
+      dict.add("on");
+      dict.add("open");
+      dict.add("pain");
+      dict.add("pain-ointment");
+      dict.add("pajama");
+      dict.add("phone");
+      dict.add("pillow");
+      dict.add("pillow-different");
+      dict.add("pillow-thick");
+      dict.add("pillow-thin");
+      dict.add("sad");
+      dict.add("scarf");
+      dict.add("sleep");
+      dict.add("small");
+      dict.add("socks");
+      dict.add("songs");
+      dict.add("spoon");
+      dict.add("switch");
+      dict.add("t-shirt");
+      dict.add("thick");
+      dict.add("thin");
+      dict.add("time");
+      dict.add("today");
+      dict.add("toilet");
+      dict.add("tomorrow");
+      dict.add("towel");
+      dict.add("tube");
+      dict.add("turn");
+      dict.add("tv");
+      dict.add("warm");
+      dict.add("wash");
+      dict.add("water");
+      dict.add("water-less");
+      dict.add("water-more");
+      dict.add("wet");
+      dict.add("wheelchair");
+      dict.add("yesterday");
+      await prefs.setStringList("All_Words", dict);
+    } else {
+      dict = prefs.getStringList("All_Words");
+    }
+    _wordList = dict;
+    for(String word in dict){
 
-      dict.add("bathroom 0 0 0");
-      dict.add("bed-down 0 0 0");
-      dict.add("breathing-prob 0 0 0");
-      dict.add("bed 0 0 0");
-      await prefs.setStringList("B", dict);
-      dict.clear();
+      if(prefs.getStringList(word) == null){
+        List<String> tempPref = new List();
+        Map<String, int> temp = new Map();
+        for(String word2 in dict){
 
-      dict.add("chair 0 0 0");
-      dict.add("change 0 0 0");
-      dict.add("clean 0 0 0");
-      dict.add("clothes 0 0 0");
-      dict.add("cold 0 0 0");
-      dict.add("cream 0 0 0");
-      dict.add("crushed 0 0 0");
-      await prefs.setStringList("C", dict);
-      dict.clear();
+          temp[word2] = 0;
+          tempPref.add(word2 + " 0");
+        }
 
-      dict.add("dressing 0 0 0");
-      dict.add("drink 0 0 0");
-      dict.add("dry 0 0 0");
-      dict.add("dining-room 0 0 0");
-      await prefs.setStringList("D", dict);
-      dict.clear();
+        await prefs.setStringList(word, tempPref);
 
-      dict.add("eat 0 0 0");
-      await prefs.setStringList("E", dict);
-      dict.clear();
+        markovModel[word] = temp;
+      } else {
+        List<String> tempPref = prefs.getStringList(word);
+        Map<String, int> temp = new Map();
 
-      dict.add("fan-fast 0 0 0");
-      dict.add("fan-off 0 0 0");
-      dict.add("fan-on 0 0 0");
-      dict.add("fan-slow 0 0 0");
-      dict.add("fell 0 0 0");
-      dict.add("fresh 0 0 0");
-      dict.add("full 0 0 0");
-      await prefs.setStringList("F", dict);
-      dict.clear();
+        for(String word2 in tempPref){
+          temp[word2.split(" ")[0]] = int.parse(word2.split(" ")[1]);
+        }
 
-      dict.add("gate 0 0 0");
-      await prefs.setStringList("G", dict);
-      dict.clear();
-
-      dict.add("half 0 0 0");
-      dict.add("hand 0 0 0");
-      dict.add("happy 0 0 0");
-      dict.add("hospital 0 0 0");
-      dict.add("hurt 0 0 0");
-      await prefs.setStringList("H", dict);
-      dict.clear();
-
-      await prefs.setStringList("I", dict);
-
-      await prefs.setStringList("J", dict);
-
-      await prefs.setStringList("K", dict);
-
-      dict.add("less 0 0 0");
-      dict.add("light-off 0 0 0");
-      dict.add("light-on 0 0 0");
-      await prefs.setStringList("L", dict);
-      dict.clear();
-
-      dict.add("massage 0 0 0");
-      dict.add("medicine 0 0 0");
-      dict.add("medicine-pain 0 0 0");
-      dict.add("more 0 0 0");
-      dict.add("mouth 0 0 0");
-      dict.add("mouth-wash 0 0 0");
-      dict.add("music 0 0 0");
-      await prefs.setStringList("M", dict);
-      dict.clear();
-
-      dict.add("news 0 0 0");
-      dict.add("nose 0 0 0");
-      dict.add("not 0 0 0");
-      dict.add("not-hungry 0 0 0");
-      dict.add("number 0 0 0");
-      await prefs.setStringList("N", dict);
-      dict.clear();
-
-      dict.add("off 0 0 0");
-      dict.add("oil 0 0 0");
-      dict.add("on 0 0 0");
-      dict.add("open 0 0 0");
-      await prefs.setStringList("O", dict);
-      dict.clear();
-
-      dict.add("pain 0 0 0");
-      dict.add("pain-ointment 0 0 0");
-      dict.add("pajama 0 0 0");
-      dict.add("phone 0 0 0");
-      dict.add("pillow 0 0 0");
-      dict.add("pillow-different 0 0 0");
-      dict.add("pillow-thick 0 0 0");
-      dict.add("pillow-thin 0 0 0");
-      await prefs.setStringList("P", dict);
-      dict.clear();
-
-      await prefs.setStringList("Q", dict);
-
-      await prefs.setStringList("R", dict);
-
-      dict.add("sad 0 0 0");
-      dict.add("scarf 0 0 0");
-      dict.add("sleep 0 0 0");
-      dict.add("small 0 0 0");
-      dict.add("socks 0 0 0");
-      dict.add("songs 0 0 0");
-      dict.add("spoon 0 0 0");
-      dict.add("switch 0 0 0");
-      await prefs.setStringList("S", dict);
-      dict.clear();
-
-      dict.add("t-shirt 0 0 0");
-      dict.add("thick 0 0 0");
-      dict.add("thin 0 0 0");
-      dict.add("time 0 0 0");
-      dict.add("today 0 0 0");
-      dict.add("toilet 0 0 0");
-      dict.add("tomorrow 0 0 0");
-      dict.add("towel 0 0 0");
-      dict.add("tube 0 0 0");
-      dict.add("turn 0 0 0");
-      dict.add("tv 0 0 0");
-      await prefs.setStringList("T", dict);
-      dict.clear();
-
-      await prefs.setStringList("U", dict);
-
-      await prefs.setStringList("V", dict);
-
-      dict.add("warm 0 0 0");
-      dict.add("wash 0 0 0");
-      dict.add("water 0 0 0");
-      dict.add("water-less 0 0 0");
-      dict.add("water-more 0 0 0");
-      dict.add("wet 0 0 0");
-      dict.add("wheelchair 0 0 0");
-      await prefs.setStringList("W", dict);
-      dict.clear();
-
-      dict.add("yesterday 0 0 0");
-      await prefs.setStringList("Y", dict);
-      dict.clear();
-
-      await prefs.setStringList("Z", dict);
+        markovModel[word] = temp;
+      }
     }
   }
 
+  Future _saveMarkovModel() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> dict = prefs.getStringList("All_Words");
+
+    for(String word in dict){
+
+      List<String> tempPref = new List();
+      for(String word2 in dict) {
+        tempPref.add(word2 + " " + markovModel[word][word2].toString());
+      }
+
+      await prefs.setStringList(word, tempPref);
+
+    }
+  }
+
+
+
+  //Each of the buttons that appear starting with the letter
   void populateWidgetWords(List<String> words){
     _widgetWords.clear();
     for(int x = 0; x < words.length; x++)
@@ -207,6 +198,11 @@ class _KeyboardState extends State<Keyboard> {
         width: MediaQuery.of(context).size.width,
         child: FlatButton(
           onPressed: (){
+            if(previousWord != null)
+              markovModel[previousWord][words.elementAt(x).split(" ")[0]]++;
+            print(markovModel);
+            _saveMarkovModel();
+            previousWord = words.elementAt(x).split(" ")[0];
             print(words.elementAt(x).split(" ")[0]);
           },
           splashColor: Colors.cyan[100],
@@ -215,16 +211,20 @@ class _KeyboardState extends State<Keyboard> {
           )
         )
       ));
-    print(_widgetWords.length);
+//    print(_widgetWords.length);
   }
 
-  Future<List<String>> _getWords(String s) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    _wordList = prefs.getStringList(s);
-    return _wordList;
+  List<String> _getList(String s) {
+    List<String> wordsThatStartWith = new List();
+    for(String i in _wordList){
+      if(i.startsWith(s)){
+        wordsThatStartWith.add(i);
+      }
+    }
+    return wordsThatStartWith;
   }
 
-  Widget createBtn(String name){
+  Widget createBtn(String letter){
     return Expanded(
       child: Container(
         margin: const EdgeInsets.all(2.0),
@@ -239,19 +239,55 @@ class _KeyboardState extends State<Keyboard> {
         child: FlatButton(
           splashColor: Colors.cyan[100],
           child: Center(
-              child: Text(name, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
+              child: Text(letter, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
           ),
           onPressed: (){
-            _getWords(name).then((onValue){
-              setState(() {
-                populateWidgetWords(onValue);
-              });
+            setState(() {
+              populateWidgetWords(_getList(letter.toLowerCase()));
             });
           },
         )
       )
     );
   }
+//  Future<List<String>> _getWords() async {
+//    SharedPreferences prefs = await SharedPreferences.getInstance();
+//    List <String> _wordList = new List();
+//    _wordList.addAll(prefs.getStringList("A"));
+//    _wordList.addAll(prefs.getStringList("B"));
+//    _wordList.addAll(prefs.getStringList("C"));
+//    _wordList.addAll(prefs.getStringList("D"));
+//    _wordList.addAll(prefs.getStringList("E"));
+//    _wordList.addAll(prefs.getStringList("F"));
+//    _wordList.addAll(prefs.getStringList("G"));
+//    _wordList.addAll(prefs.getStringList("H"));
+//    if(prefs.getStringList("I") != null)
+//      _wordList.addAll(prefs.getStringList("I"));
+//    if(prefs.getStringList("J") != null)
+//      _wordList.addAll(prefs.getStringList("J"));
+//    if(prefs.getStringList("K") != null)
+//      _wordList.addAll(prefs.getStringList("K"));
+//    _wordList.addAll(prefs.getStringList("L"));
+//    _wordList.addAll(prefs.getStringList("M"));
+//    _wordList.addAll(prefs.getStringList("N"));
+//    _wordList.addAll(prefs.getStringList("O"));
+//    _wordList.addAll(prefs.getStringList("P"));
+//    if(prefs.getStringList("Q") != null)
+//      _wordList.addAll(prefs.getStringList("Q"));
+//    if(prefs.getStringList("R") != null)
+//      _wordList.addAll(prefs.getStringList("R"));
+//    _wordList.addAll(prefs.getStringList("S"));
+//    _wordList.addAll(prefs.getStringList("T"));
+//    if(prefs.getStringList("U") != null)
+//      _wordList.addAll(prefs.getStringList("U"));
+//    if(prefs.getStringList("V") != null)
+//      _wordList.addAll(prefs.getStringList("V"));
+//    _wordList.addAll(prefs.getStringList("W"));
+//    _wordList.addAll(prefs.getStringList("Y"));
+//    if(prefs.getStringList("Z") != null)
+//      _wordList.addAll(prefs.getStringList("Z"));
+//    return _wordList;
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -357,19 +393,21 @@ class _KeyboardState extends State<Keyboard> {
         ),
 
 
-//        floatingActionButton: FloatingActionButton(
-//          child: Icon(Icons.show_chart),
-//          onPressed: () {
-//            Navigator.push(
-//                context,
-//                MaterialPageRoute(builder: (context) => Statistics()));
-//          },
-//        ),
-//        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.show_chart),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Statistics()));
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: BottomNavBar()
       ),
     );
   }
+
+
 
 
 

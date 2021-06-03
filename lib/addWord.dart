@@ -83,9 +83,9 @@ class _AddWord extends State<AddWord> {
                 ),
                 onPressed: () async {
                   SharedPreferences prefs = await SharedPreferences.getInstance();
-                  List <String> _wordList = prefs.getStringList(myController.text.toUpperCase()[0].toString());
-                  _wordList.add(myController.text.replaceAll(" ", "-") + " 0 0 0");
-                  await prefs.setStringList(myController.text.toUpperCase()[0].toString(), _wordList);
+                  List <String> _wordList = prefs.getStringList("All_Words");
+                  _wordList.add(myController.text.replaceAll(" ", "-").toLowerCase());
+                  await prefs.setStringList("All_Words", _wordList);
                   print(_wordList.toString());
                   myController.text = "";
                 },
@@ -95,15 +95,15 @@ class _AddWord extends State<AddWord> {
           ],
         ),
 
-//        floatingActionButton: FloatingActionButton(
-//          child: Icon(Icons.show_chart),
-//          onPressed: () {
-//            Navigator.push(
-//                context,
-//                MaterialPageRoute(builder: (context) => Statistics()));
-//          },
-//        ),
-//        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.show_chart),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Statistics()));
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: BottomNavBar(),
       )
     );

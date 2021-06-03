@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:pdapp/BottomNavBar.dart';
 import 'package:pdapp/Statistics.dart';
 import 'package:pdapp/suggestions.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
 import 'LineChart.dart';
@@ -287,6 +288,7 @@ class _DrawState extends State<Draw> {
                       startTime = previousTime;
 
                       if(staticSpiral == 0){
+
                         difference = 0;
                         totalDistanceStability = 0;
                       }
@@ -336,6 +338,10 @@ class _DrawState extends State<Draw> {
 
                       } else {
                         staticSpiral = 0;
+                        _storeTestScores();
+                        print(staticSpiralScore);
+                        print(dynamicSpiralScore);
+                        print(totalDistanceStability);
                         //totalDistanceStability = 0;
 
                       }
@@ -409,10 +415,16 @@ class _DrawState extends State<Draw> {
 //                          fontSize: 30,
 //                        )),
                         ((staticSpiral == 0)?
+
                         (Padding(
                           padding: EdgeInsets.all(5.0),
                           child: Text("Static Spiral Test Results: " + staticSpiralScore.round().toString() + "%", style: new TextStyle(
-                            color: Colors.black,
+                            color: (staticSpiralScore.round()>= 0 && staticSpiralScore.round() <= 25)?
+                              (Colors.lightGreen):
+                                ((staticSpiralScore.round()> 25 && staticSpiralScore.round() <= 50)?
+                                (Colors.yellow):
+                                Colors.redAccent
+                              ),
                             fontWeight: FontWeight.bold,
                             fontSize: 25,
                           )),
@@ -422,7 +434,12 @@ class _DrawState extends State<Draw> {
                         (Padding(
                           padding: EdgeInsets.all(5.0),
                           child: Text("Dynamic Spiral Test Results: " + dynamicSpiralScore.round().toString() + "%", style: new TextStyle(
-                            color: Colors.black,
+                            color: (dynamicSpiralScore.round()>= 0 && dynamicSpiralScore.round() <= 25)?
+                              (Colors.lightGreen):
+                              ((dynamicSpiralScore.round()> 25 && dynamicSpiralScore.round() <= 50)?
+                              (Colors.yellow):
+                              Colors.redAccent
+                              ),
                             fontWeight: FontWeight.bold,
                             fontSize: 25,
                           )),
@@ -432,7 +449,12 @@ class _DrawState extends State<Draw> {
                         (Padding(
                           padding: EdgeInsets.all(5.0),
                           child: Text("Stability Test Results: " + totalDistanceStability.round().toString(), style: new TextStyle(
-                            color: Colors.black,
+                            color: (totalDistanceStability.round()>= 0 && totalDistanceStability.round() <= 5)?
+                              (Colors.lightGreen):
+                              ((totalDistanceStability.round()> 5 && totalDistanceStability.round() <= 15)?
+                              (Colors.yellow):
+                              Colors.redAccent
+                              ),
                             fontWeight: FontWeight.bold,
                             fontSize: 25,
                           )),
@@ -481,15 +503,15 @@ class _DrawState extends State<Draw> {
         ],
       ),
 
-//      floatingActionButton: FloatingActionButton(
-//        child: Icon(Icons.show_chart),
-//        onPressed: () {
-//          Navigator.push(
-//              context,
-//              MaterialPageRoute(builder: (context) => Statistics()));
-//        },
-//      ),
-//      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.show_chart),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Statistics()));
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavBar(),
 
     );
@@ -519,7 +541,7 @@ class _DrawState extends State<Draw> {
     for(int i = 0; i < 18; i++){
       staticHistogramAngle[i] = staticHistogramAngle[i]/angles.length;
     }
-    print(staticHistogramAngle);
+//    print(staticHistogramAngle);
   }
 
 //  void fillDynamicHistogram() {
@@ -548,7 +570,7 @@ class _DrawState extends State<Draw> {
     for(int i = 0; i < 18; i++){
       dynamicHistogramAngle[i] = dynamicHistogramAngle[i]/angles.length;
     }
-    print(dynamicHistogramAngle);
+//    print(dynamicHistogramAngle);
   }
 
 //  double findDifference() {
@@ -641,6 +663,32 @@ class _DrawState extends State<Draw> {
         )
       );
     });
+  }
+
+  Future _storeTestScores() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(!prefs.containsKey("StaticSpiral")) {
+      List<String> dict = new List();
+      await prefs.setStringList("StaticSpiral", dict);
+      await prefs.setStringList("DynamicSpiral", dict);
+      await prefs.setStringList("Stability", dict);
+    }
+    List<String> staticSpiralScores = prefs.getStringList("StaticSpiral");
+    List<String> dynamicSpiralScores = prefs.getStringList("DynamicSpiral");
+    List<String> stabilityScores = prefs.getStringList("Stability");
+
+    staticSpiralScores.add(staticSpiralScore.toStringAsFixed(2));
+    dynamicSpiralScores.add(dynamicSpiralScore.toStringAsFixed(2));
+    stabilityScores.add(totalDistanceStability.toStringAsFixed(2));
+
+    await prefs.setStringList("StaticSpiral", staticSpiralScores);
+    await prefs.setStringList("DynamicSpiral", dynamicSpiralScores);
+    await prefs.setStringList("Stability", stabilityScores);
+
+    print(prefs.getStringList("StaticSpiral"));
+    print(prefs.getStringList("DynamicSpiral"));
+    print(prefs.getStringList("Stability"));
+
   }
 
 }

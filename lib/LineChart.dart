@@ -19,7 +19,24 @@ class LineChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new charts.LineChart(seriesList, animate: animate);
+    return new charts.LineChart(
+      seriesList,
+      animate: animate,
+      behaviors: [
+        new charts.ChartTitle('Top title text',
+            behaviorPosition: charts.BehaviorPosition.top,
+            titleOutsideJustification: charts.OutsideJustification.start,
+            innerPadding: 10),
+        new charts.ChartTitle('Bottom title text',
+            behaviorPosition: charts.BehaviorPosition.bottom,
+            titleOutsideJustification:
+            charts.OutsideJustification.middleDrawArea),
+        new charts.ChartTitle('Start title',
+            behaviorPosition: charts.BehaviorPosition.start,
+            titleOutsideJustification:
+            charts.OutsideJustification.middleDrawArea),
+      ],
+    );
   }
 
   /// Create one series with sample hard coded data.

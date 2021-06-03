@@ -17,17 +17,56 @@ class Suggestions extends StatefulWidget {
 
 class _SuggestionState extends State<Suggestions> {
 
-  int _selectedIndex = 2;
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   Map<String, Map<String, int>> markovModel = new Map();
   List<String> topTwelveWords = new List();
   String previousWord;
+  List<String> _wordList = new List();
 
-  void updateMarkov(){
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _createSharedPrefs().then((onValue){
+//      print(markovModel);
+      previousWord = findMostClickedWord();
+      updateTopTwelveWords();
 
+      setState(() {
 
-    print(markovModel);
+      });
+    });
+  }
+
+  String findMostClickedWord(){
+    Map<String, int> counts = new Map();
+    for(String word in _wordList){
+      counts[word] = 0;
+    }
+
+    for(String word in _wordList){
+      for(String word2 in _wordList){
+        counts[word2] += markovModel[word][word2];
+      }
+    }
+
+//    print(counts);
+
+    String mostClickedWord;
+    int maxClicks = -1;
+    for(String word in _wordList){
+      if(counts[word] > maxClicks){
+        mostClickedWord = word;
+        maxClicks = counts[word];
+      }
+    }
+    print("The most clicked word is: " + mostClickedWord);
+    return mostClickedWord;
+  }
+
+  void updateTopTwelveWords(){
+    print(markovModel[previousWord]);
     //markovModel.forEach((word, wordWeights) => topTwelveWords.add(word));
 
     if(previousWord != null){
@@ -40,68 +79,151 @@ class _SuggestionState extends State<Suggestions> {
 
       sortedMap.forEach((word, wordWeights) => topTwelveWords.add(word));
 
-      print(sortedMap.toString());
+//      print(sortedMap.toString());
     }
-
-
-
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+  Future _createSharedPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> dict = new List();
+    if(!prefs.containsKey("All_Words")){
+      dict.add("ac-high");
+      dict.add("ac-low");
+      dict.add("ac-off");
+      dict.add("ac-on");
+      dict.add("airbed");
+      dict.add("bathroom");
+      dict.add("bed-down");
+      dict.add("breathing-prob");
+      dict.add("bed");
+      dict.add("chair");
+      dict.add("change");
+      dict.add("clean");
+      dict.add("clothes");
+      dict.add("cold");
+      dict.add("cream");
+      dict.add("crushed");
+      dict.add("dressing");
+      dict.add("drink");
+      dict.add("dry");
+      dict.add("dining-room");
+      dict.add("eat");
+      dict.add("fan-fast");
+      dict.add("fan-off");
+      dict.add("fan-on");
+      dict.add("fan-slow");
+      dict.add("fell");
+      dict.add("fresh");
+      dict.add("full");
+      dict.add("gate");
+      dict.add("half");
+      dict.add("hand");
+      dict.add("happy");
+      dict.add("hospital");
+      dict.add("hurt");
+      dict.add("less");
+      dict.add("light-off");
+      dict.add("light-on");
+      dict.add("massage");
+      dict.add("medicine");
+      dict.add("medicine-pain");
+      dict.add("more");
+      dict.add("mouth");
+      dict.add("mouth-wash");
+      dict.add("music");
+      dict.add("news");
+      dict.add("nose");
+      dict.add("not");
+      dict.add("not-hungry");
+      dict.add("number");
+      dict.add("off");
+      dict.add("oil");
+      dict.add("on");
+      dict.add("open");
+      dict.add("pain");
+      dict.add("pain-ointment");
+      dict.add("pajama");
+      dict.add("phone");
+      dict.add("pillow");
+      dict.add("pillow-different");
+      dict.add("pillow-thick");
+      dict.add("pillow-thin");
+      dict.add("sad");
+      dict.add("scarf");
+      dict.add("sleep");
+      dict.add("small");
+      dict.add("socks");
+      dict.add("songs");
+      dict.add("spoon");
+      dict.add("switch");
+      dict.add("t-shirt");
+      dict.add("thick");
+      dict.add("thin");
+      dict.add("time");
+      dict.add("today");
+      dict.add("toilet");
+      dict.add("tomorrow");
+      dict.add("towel");
+      dict.add("tube");
+      dict.add("turn");
+      dict.add("tv");
+      dict.add("warm");
+      dict.add("wash");
+      dict.add("water");
+      dict.add("water-less");
+      dict.add("water-more");
+      dict.add("wet");
+      dict.add("wheelchair");
+      dict.add("yesterday");
+      await prefs.setStringList("All_Words", dict);
+    } else {
+      dict = prefs.getStringList("All_Words");
+    }
+    _wordList = dict;
+    for(String word in dict){
 
-    _getWords().then((tempList){
-      for(String word in tempList){
-
+      print(word + ": " + prefs.getStringList(word).toString());
+      if(prefs.getStringList(word) == null){
+        List<String> tempPref = new List();
         Map<String, int> temp = new Map();
-        for(String word2 in tempList){
-          temp[word2.split(" ")[0]] = 0;
+        for(String word2 in dict){
+
+          temp[word2] = 0;
+          tempPref.add(word2 + " 0");
         }
 
-        markovModel[word.split(" ")[0]] = temp;
+        await prefs.setStringList(word, tempPref);
+
+        markovModel[word] = temp;
+      } else {
+        List<String> tempPref = prefs.getStringList(word);
+        Map<String, int> temp = new Map();
+
+        for(String word2 in tempPref){
+//          print(word2);
+          temp[word2.split(" ")[0]] = int.parse(word2.split(" ")[1]);
+        }
+
+        markovModel[word] = temp;
       }
-
-      print(markovModel);
-      markovModel.forEach((word, wordWeights) => topTwelveWords.add(word));
-      print(topTwelveWords.toString());
-
-      setState(() {
-
-      });
-    });
+    }
   }
 
-  Future<List<String>> _getWords() async {
+  Future _saveMarkovModel() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List <String> _wordList = new List();
-    _wordList.addAll(prefs.getStringList("A"));
-    _wordList.addAll(prefs.getStringList("B"));
-    _wordList.addAll(prefs.getStringList("C"));
-    _wordList.addAll(prefs.getStringList("D"));
-    _wordList.addAll(prefs.getStringList("E"));
-    _wordList.addAll(prefs.getStringList("F"));
-    _wordList.addAll(prefs.getStringList("G"));
-    _wordList.addAll(prefs.getStringList("H"));
-//    _wordList.addAll(prefs.getStringList("I"));
-//    _wordList.addAll(prefs.getStringList("J"));
-//    _wordList.addAll(prefs.getStringList("K"));
-    _wordList.addAll(prefs.getStringList("L"));
-    _wordList.addAll(prefs.getStringList("M"));
-    _wordList.addAll(prefs.getStringList("N"));
-    _wordList.addAll(prefs.getStringList("O"));
-    _wordList.addAll(prefs.getStringList("P"));
-//    _wordList.addAll(prefs.getStringList("Q"));
-//    _wordList.addAll(prefs.getStringList("R"));
-    _wordList.addAll(prefs.getStringList("S"));
-    _wordList.addAll(prefs.getStringList("T"));
-//    _wordList.addAll(prefs.getStringList("U"));
-//    _wordList.addAll(prefs.getStringList("V"));
-    _wordList.addAll(prefs.getStringList("W"));
-    _wordList.addAll(prefs.getStringList("Y"));
-//    _wordList.addAll(prefs.getStringList("Z"));
-    return _wordList;
+    List<String> dict = prefs.getStringList("All_Words");
+
+    for(String word in dict){
+
+      List<String> tempPref = new List();
+      for(String word2 in dict) {
+        tempPref.add(word2 + " " + markovModel[word][word2].toString());
+      }
+
+      await prefs.setStringList(word, tempPref);
+
+    }
+//    print(markovModel);
   }
 
   Widget createBtn(String name){
@@ -127,7 +249,8 @@ class _SuggestionState extends State<Suggestions> {
                   markovModel[previousWord][name]++;
                 setState(() {
 //                  print("set state");
-                  updateMarkov();
+                  updateTopTwelveWords();
+                  _saveMarkovModel();
                   previousWord = name;
                   print("just tapped on " + name);
                 });
@@ -227,15 +350,15 @@ class _SuggestionState extends State<Suggestions> {
           ],
         ),
 
-//        floatingActionButton: FloatingActionButton(
-//          child: Icon(Icons.show_chart),
-//          onPressed: () {
-//            Navigator.push(
-//                context,
-//                MaterialPageRoute(builder: (context) => Statistics()));
-//          },
-//        ),
-//        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.show_chart),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Statistics()));
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: BottomNavBar(),
       ),
     );
