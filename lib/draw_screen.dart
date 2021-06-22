@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:core';
 import 'dart:io';
 import 'dart:math';
@@ -36,6 +37,10 @@ class _DrawState extends State<Draw> {
   int startTime = 0;
   int previousTime = 0;
   int currentTime = 0;
+
+  double staticSpiralTime = 0;
+  double dynamicSpiralTime = 0;
+
   double prevVelocity = 0;
   double currVelocity = 0;
 //  double prevDistance;
@@ -47,7 +52,8 @@ class _DrawState extends State<Draw> {
   double avgDT = 0;
   int ctrRefresh = 0;
   double finalDT = 8.340;
-  double timePassed = 0;
+  double finalTimePassed = 0;
+  double timeElapsed = 0;
 
   double prevDX = 0, prevDY = 0;
   double currDX = 0, currDY = 0;
@@ -78,6 +84,8 @@ class _DrawState extends State<Draw> {
   double staticSpiralScore = 0;
   double dynamicSpiralScore = 0;
 
+  String equation = "-";
+
 
 
   void initState(){
@@ -95,16 +103,60 @@ class _DrawState extends State<Draw> {
       staticHistogramAngle[x] = 0;
       dynamicHistogramAngle[x] = 0;
     }
-//    _instructionsModal(context);
+    generateRandomEquation();
   }
 
-//  double standardDeviation(){
-//    double variation = 0;
-//    for(int x = 0; x < data.length; x++){
-//      variation += (data.elementAt(x).acceleration * data.elementAt(x).acceleration).toDouble() / data.length;
-//    }
-//    return sqrt(variation);
-//  }
+  void generateRandomEquation(){
+    equation = "";
+    int firstNum = r.nextInt(20)+2;
+    equation += firstNum.toString();
+    int secondNum = 100;
+    print(equation);
+    if(r.nextInt(2)==1){
+      equation += " + ";
+      secondNum = r.nextInt(20);
+
+    } else{
+      equation += " - ";
+      while(secondNum >= firstNum){
+        secondNum = r.nextInt(20);
+      }
+    }
+    print(equation);
+    equation += secondNum.toString();
+    print(equation);
+  }
+
+  Timer _timer;
+  int _start = 12;
+
+  void startTimer() {
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+          (Timer timer) {
+        if (_start == 0) {
+          setState(() {
+            _start=12;
+            timer.cancel();
+          });
+        } else {
+          setState(() {
+            if(_start % 3 == 0){
+              generateRandomEquation();
+            }
+            _start--;
+          });
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
 
   // the current time, in “seconds since the epoch”
   int currentTimeMS() {
@@ -122,13 +174,26 @@ class _DrawState extends State<Draw> {
       extendBody: true,
       appBar: PreferredSize(
           child: AppBar(
-            title: Text((staticSpiral == 0)? "Static Spiral Test":(staticSpiral == 1)? "Dynamic Spiral Test": "Stability Test", style: new TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 35,
-            )),
+            automaticallyImplyLeading: false,
+            title: FittedBox(
+              fit: BoxFit.fitWidth,
+              child: Text((staticSpiral == 0)? "Static Spiral Test":(staticSpiral == 1)? "Dynamic Spiral Test": "Stability Test", style: new TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 35,
+              )),
+            ),
             backgroundColor: Colors.cyan[100],
             actions: <Widget>[
+              IconButton(
+                onPressed: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Draw()),
+                  );
+                },
+                icon: Icon(Icons.refresh, color: Colors.blueAccent, size: 30)
+              ),
               IconButton(
                 icon: Icon(Icons.info, color: Colors.blueAccent, size: 30),
                 onPressed: (){
@@ -141,17 +206,24 @@ class _DrawState extends State<Draw> {
       ),
       body: Stack(
         children: <Widget>[
+          (staticSpiral!=2)?
+            Container(
+                margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width*.77, MediaQuery.of(context).size.width*.05, 0, 0),
+                child: Text("$timeElapsed seconds passed", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
+            ):
+            Container(),
 
           //determining whether to do static/dynamic/stability
-          (staticSpiral == 0)? Container(
-            margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-            width: MediaQuery.of(context).size.width,
+          (staticSpiral == 0)?
+            (Container(
+              margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+              width: MediaQuery.of(context).size.width,
 
-            child: FittedBox(
-              child: Image(image: AssetImage('images/spiral.jpeg')),
-              fit: BoxFit.fill
-            )
-          ): (staticSpiral == 1)?(
+              child: FittedBox(
+                child: Image(image: AssetImage('images/spiral.jpeg')),
+                fit: BoxFit.fill
+              )
+            )): (staticSpiral == 1)?(
             (randomNum >8)?Container(
               margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
               width: MediaQuery.of(context).size.width,
@@ -173,22 +245,25 @@ class _DrawState extends State<Draw> {
                   Padding(
                     padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
 
-                    child:((timePassed).round() > 10)?(
-                     Text((timePassed).round().toString(), style: new TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.redAccent,
-                      fontSize: 30,
-                    ))):(Text((timePassed).round().toString(), style: new TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
-                    )))
+                    child:
+                      Text("Countdown: $_start", style: new TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                      )
+                    )
                   ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
 
+                    child: Text("Solve: " + equation, style: new TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                    )
+                  )),
                   Padding(
                     padding: EdgeInsets.fromLTRB(0, 80, 0, 0),
                     child: Icon(Icons.brightness_1, color: Colors.black, size: 10),
                   )
-
                 ],
               )
             )
@@ -197,26 +272,6 @@ class _DrawState extends State<Draw> {
 
           Column(
             children: <Widget>[
-
-//              PreferredSize(
-//                child: AppBar(
-//                  title: Text((staticSpiral == 0)? "Static Spiral Test":(staticSpiral == 1)? "Dynamic Spiral Test": "Stability Test", style: new TextStyle(
-//                    color: Colors.black,
-//                    fontWeight: FontWeight.bold,
-//                    fontSize: 35,
-//                  )),
-//                  backgroundColor: Colors.pink[100],
-//                  actions: <Widget>[
-//                    IconButton(
-//                      icon: Icon(Icons.info, color: Colors.blueAccent, size: 30),
-//                      onPressed: (){
-//                        _instructionsModal(context);
-//                      },
-//                    )
-//                  ],
-//                ),
-//                preferredSize: Size.fromHeight(60),
-//              ),
 
               Container(
                 height: MediaQuery.of(context).size.width,
@@ -229,6 +284,7 @@ class _DrawState extends State<Draw> {
                       randomNum = r.nextInt(10);
                       currentTime = currentTimeMS();
                       dt = currentTime-previousTime;
+                      timeElapsed = (currentTimeMS()-startTime).toDouble()/1000.0;
 
                       avgDT += dt;
                       ctrRefresh++;
@@ -247,7 +303,7 @@ class _DrawState extends State<Draw> {
                       prevVelocity = currVelocity;
 
                       if(staticSpiral == 2){
-                        timePassed = (currentTime-startTime)/1000.0;
+                        finalTimePassed = (currentTime-startTime)/1000.0;
                       }
 
                       prevDX = currDX;
@@ -275,11 +331,14 @@ class _DrawState extends State<Draw> {
                   onPanStart: (details) {
                     setState(() {
 
+                      timeElapsed = 0;
+
 //                      print("statusBar + appBar: " + (MediaQuery.of(context).padding.top+60).toString());
 
                       points.clear();
                       data.clear();
                       angles.clear();
+                      angles.add(new Angles(0, 0));
 
                       prevDX = details.globalPosition.dx;
                       prevDY = details.globalPosition.dy;
@@ -287,8 +346,10 @@ class _DrawState extends State<Draw> {
                       previousTime = currentTimeMS();
                       startTime = previousTime;
 
-                      if(staticSpiral == 0){
+                      if(staticSpiral == 2)
+                        startTimer();
 
+                      if(staticSpiral == 0) {
                         difference = 0;
                         totalDistanceStability = 0;
                       }
@@ -313,20 +374,22 @@ class _DrawState extends State<Draw> {
 //                      print("end " + totalDistanceStability.toString());
 //                      dev = standardDeviation();
 //                      points.clear();
+
                       endedDrawing = true;
                       if(staticSpiral == 0){
                         totalDistanceStability = 0;
                         fillStaticHistogramAngles();
+                        staticSpiralTime = (currentTimeMS()-startTime).toDouble()/1000.0;
+                        print("Time taken for Static Spiral Test: " + (staticSpiralTime).toString());
                         staticSpiral = 1;
                         randomNum = 10;
                       } else if(staticSpiral == 1){
                         staticSpiral = 2;
                         fillDynamicHistogramAngles();
-
-//                        difference = findDifference();
+                        dynamicSpiralTime = (currentTimeMS()-startTime).toDouble()/1000.0;
+                        print("Time taken for Dynamic Spiral Test: " + (dynamicSpiralTime).toString());
                         staticSpiralScore = calculateStaticSpiralScore();
                         dynamicSpiralScore = calculateDynamicSpiralScore();
-//                        print(difference);
                         for(int x = 0; x < 16; x++){
                           staticHistogram[x] = 0;
                           dynamicHistogram[x] = 0;
@@ -337,11 +400,14 @@ class _DrawState extends State<Draw> {
                         }
 
                       } else {
+                        // endedDrawing = false;
+                        timeElapsed = 0;
+                        // dispose();
                         staticSpiral = 0;
                         _storeTestScores();
-                        print(staticSpiralScore);
-                        print(dynamicSpiralScore);
-                        print(totalDistanceStability);
+                        // print(staticSpiralScore);
+                        // print(dynamicSpiralScore);
+                        // print(totalDistanceStability);
                         //totalDistanceStability = 0;
 
                       }
@@ -360,7 +426,7 @@ class _DrawState extends State<Draw> {
                           id: 'Sales',
                           colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
                           domainFn: (Angles x, _) => x.time,
-                          measureFn: (Angles x, _) => x.angle,
+                          measureFn: (Angles x, _) => 180 - x.angle,
                           data: angles,
                         )
                       ];
@@ -414,8 +480,48 @@ class _DrawState extends State<Draw> {
 //                          fontWeight: FontWeight.bold,
 //                          fontSize: 30,
 //                        )),
-                        ((staticSpiral == 0)?
 
+                        (staticSpiral == 0)?
+                          Padding(
+                            padding: EdgeInsets.all(5.0),
+                            child: Text("Static Spiral Test: Starting from the right side, trace the spiral towards the center as close to 6 seconds as possible.", style: new TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            )),
+                          ):Container(),
+                        (staticSpiral == 1)?
+                        Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Text("Dynamic Spiral test: This test is similar to the Static Spiral Test, except that the spiral flashes on and off to increase difficulty. Complete as close to 6 seconds as possible, and do not remove your finger until you have fully traced the spiral.", style: new TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          )),
+                        ):Container(),
+                        (staticSpiral == 2)?
+                        Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Text("Stability Test: Try to keep your finger as steady as possible on the point shown on the screen for 12 seconds, while completing the mental arithmetic that will change periodically.", style: new TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          )),
+                        ):Container(),
+
+
+                        ((staticSpiral == 0 && endedDrawing==false))?
+                        Padding(
+                          // padding: EdgeInsets.all(5.0),
+                          padding: EdgeInsets.fromLTRB(5, 20, 5, 5),
+                          child: Text("Complete the Static Spiral Test, Dynamic Spiral Test, and Stability Test to view scores.", style: new TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          )),
+                        ):Container(),
+
+                        ((staticSpiral == 0 && endedDrawing)?
                         (Padding(
                           padding: EdgeInsets.all(5.0),
                           child: Text("Static Spiral Test Results: " + staticSpiralScore.round().toString() + "%", style: new TextStyle(
@@ -426,11 +532,11 @@ class _DrawState extends State<Draw> {
                                 Colors.redAccent
                               ),
                             fontWeight: FontWeight.bold,
-                            fontSize: 25,
+                            fontSize: 20,
                           )),
                         )) : Container()),
 
-                        ((staticSpiral == 0)?
+                        ((staticSpiral == 0 && endedDrawing)?
                         (Padding(
                           padding: EdgeInsets.all(5.0),
                           child: Text("Dynamic Spiral Test Results: " + dynamicSpiralScore.round().toString() + "%", style: new TextStyle(
@@ -441,11 +547,11 @@ class _DrawState extends State<Draw> {
                               Colors.redAccent
                               ),
                             fontWeight: FontWeight.bold,
-                            fontSize: 25,
+                            fontSize: 20,
                           )),
                         )) : Container()),
 
-                        ((staticSpiral == 0)?
+                        ((staticSpiral == 0 && endedDrawing)?
                         (Padding(
                           padding: EdgeInsets.all(5.0),
                           child: Text("Stability Test Results: " + totalDistanceStability.round().toString(), style: new TextStyle(
@@ -456,48 +562,49 @@ class _DrawState extends State<Draw> {
                               Colors.redAccent
                               ),
                             fontWeight: FontWeight.bold,
-                            fontSize: 25,
+                            fontSize: 20,
                           )),
                         )) : Container()),
-
-
-                        Container(
-                            margin: const EdgeInsets.fromLTRB(50, 0, 50, 0),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[300],
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: Colors.black,
-                                width: 3,
-                              ),
-                            ),
-                            child: FlatButton(
-                              splashColor: Colors.cyan[100],
-                              child: Center(
-                                  child: Text("Start Over", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
-                              ),
-                              onPressed: (){
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => Draw()),
-                                );
-                              },
-                            )
-                        ),
-
-
-                        (endedDrawing)? Container(
-                          height: 200,
-                          child: LineChart(temp),
+                        // Container(
+                        //     margin: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+                        //     decoration: BoxDecoration(
+                        //       color: Colors.grey[300],
+                        //       borderRadius: BorderRadius.circular(10),
+                        //       border: Border.all(
+                        //         color: Colors.black,
+                        //         width: 3,
+                        //       ),
+                        //     ),
+                        //     child: FlatButton(
+                        //       splashColor: Colors.cyan[100],
+                        //       child: Center(
+                        //           child: Text("Start Over", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
+                        //       ),
+                        //       onPressed: (){
+                        //         Navigator.push(
+                        //           context,
+                        //           MaterialPageRoute(builder: (context) => Draw()),
+                        //         );
+                        //       },
+                        //     )
+                        // ),
+                        (endedDrawing)?
+                        Padding(
+                          padding: EdgeInsets.only(top: 20.0),
+                          child: Container(
+                            height: 200,
+                            child: LineChart(temp, "Stability through the test", "Time", "Stability"),
+                          )
                         ):
-                        Container()
+                        Container(),
+                        Container(
+                          height: 50,
+                        )
                       ],
                     )
-
-                ),
+                  ),
+                )
               )
-              )
-
             ],
           )
         ],
@@ -517,18 +624,6 @@ class _DrawState extends State<Draw> {
     );
   }
 
-//  void fillStaticHistogram() {
-//    for(int x = 0; x < data.length; x++) {
-//      for (int y = 0; y < 16; y++) {
-//        if (data.elementAt(x).acceleration < -50000 + 6250 * (y + 1) && data.elementAt(x).acceleration > -100000) {
-//          staticHistogram[y]++;
-//          break;
-//        }
-//      }
-//    }
-//    print(staticHistogram);
-//  }
-
   void fillStaticHistogramAngles() {
     for(int x = 0; x < angles.length; x++) {
       for (int y = 0; y < 18; y++) {
@@ -543,20 +638,6 @@ class _DrawState extends State<Draw> {
     }
 //    print(staticHistogramAngle);
   }
-
-//  void fillDynamicHistogram() {
-//    for(int x = 0; x < data.length; x++) {
-//      for (int y = 0; y < 16; y++) {
-//        if (data
-//            .elementAt(x)
-//            .acceleration < -50000 + 6250 * (y + 1) && data.elementAt(x).acceleration > -100000) {
-//          dynamicHistogram[y]++;
-//          break;
-//        }
-//      }
-//    }
-//    print(dynamicHistogram);
-//  }
 
   void fillDynamicHistogramAngles() {
     for(int x = 0; x < angles.length; x++) {
@@ -573,30 +654,25 @@ class _DrawState extends State<Draw> {
 //    print(dynamicHistogramAngle);
   }
 
-//  double findDifference() {
-//    int sum = 0;
-//    for(int x = 0; x < 16; x++){
-//      sum += (staticHistogram.elementAt(x) - dynamicHistogram.elementAt(x))*
-//          (staticHistogram.elementAt(x) - dynamicHistogram.elementAt(x));
-//    }
-//    return (sqrt(sum)/MediaQuery.of(context).size.width * 100)/500 * 100;
-//  }
-//  double findDifferenceAngle() {
-//    double sum = 0;
-//    for(int x = 0; x < 18; x++){
-//      sum += (18-x + 1)*100 * (staticHistogramAngle.elementAt(x) - dynamicHistogramAngle.elementAt(x))*
-//          (staticHistogramAngle.elementAt(x) - dynamicHistogramAngle.elementAt(x));
-//    }
-//    return sum;
-//  }
-
   double calculateStaticSpiralScore(){
     double sum = 0;
     for(int x = 0; x < 18; x++){
       sum += (17-x)*1000 * (staticHistogramAngle.elementAt(x))*
           (staticHistogramAngle.elementAt(x));
     }
-    return sum;
+    double finalScore = 0.0;
+    if(staticSpiralTime > 6){
+      finalScore = ((staticSpiralTime-6)/10 + 1) * sum;
+    } else {
+      finalScore = sum;
+    }
+
+    if(finalScore > 100){
+      return 100.0;
+    } else {
+      return finalScore;
+    }
+
   }
 
   double calculateDynamicSpiralScore(){
@@ -605,7 +681,20 @@ class _DrawState extends State<Draw> {
       sum += (17-x)*1000 * (dynamicHistogramAngle.elementAt(x))*
           (dynamicHistogramAngle.elementAt(x));
     }
-    return sum;
+
+    double finalScore = 0.0;
+
+    if(dynamicSpiralTime > 6){
+      finalScore = ((staticSpiralTime-6)/10 + 1) * sum;
+    } else {
+      finalScore = sum;
+    }
+
+    if(finalScore > 100){
+      return 100.0;
+    } else {
+      return finalScore;
+    }
   }
 
   void _instructionsModal(context) {
@@ -624,21 +713,21 @@ class _DrawState extends State<Draw> {
             ),
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text("1. Static Spiral Test: Starting from the right side, trace the spiral towards the center.", style: new TextStyle(
+              child: Text("1. Static Spiral Test: Starting from the right side, trace the spiral towards the center as close to 6 seconds as possible.", style: new TextStyle(
                 fontWeight: FontWeight.normal,
                 fontSize: 20,
               )),
             ),
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text("2. Dynamic Spiral test: This test is similar to the Static Spiral Test, except that the spiral flashes on and off to increase difficulty.", style: new TextStyle(
+              child: Text("2. Dynamic Spiral test: This test is similar to the Static Spiral Test, except that the spiral flashes on and off to increase difficulty. Complete as close to 5 seconds as possible.", style: new TextStyle(
                 fontWeight: FontWeight.normal,
                 fontSize: 20,
               )),
             ),
             Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text("3. Stability Test: Try to keep your finger as steady as possible on the point shown on the screen for 10 seconds.", style: new TextStyle(
+              child: Text("3. Stability Test: Try to keep your finger as steady as possible on the point shown on the screen for 12 seconds, while completing the mental arithmetic that will change periodically.", style: new TextStyle(
                 fontWeight: FontWeight.normal,
                 fontSize: 20,
               )),
@@ -685,6 +774,7 @@ class _DrawState extends State<Draw> {
     await prefs.setStringList("DynamicSpiral", dynamicSpiralScores);
     await prefs.setStringList("Stability", stabilityScores);
 
+    print("total test results");
     print(prefs.getStringList("StaticSpiral"));
     print(prefs.getStringList("DynamicSpiral"));
     print(prefs.getStringList("Stability"));
@@ -692,18 +782,6 @@ class _DrawState extends State<Draw> {
   }
 
 }
-
-//PDP behavior
-//[1, 2, 4, 12, 19, 9, 13, 33, 44, 9, 8, 18, 11, 4, 2, 0]
-//[0, 0, 0, 1, 2, 16, 62, 117, 105, 62, 17, 1, 2, 0, 0, 0] = 130.146
-
-//[0, 0, 0, 1, 2, 7, 66, 455, 534, 62, 4, 4, 1, 0, 0, 0]
-//[0, 1, 0, 0, 4, 12, 94, 365, 384, 86, 22, 2, 1, 0, 0, 0] = 179.774
-
-//normal behavior
-//[0, 1, 0, 0, 1, 5, 88, 220, 282, 77, 4, 1, 0, 0, 1, 0]
-//[0, 1, 0, 0, 0, 3, 67, 262, 287, 79, 3, 0, 0, 0, 1, 0] = 47.339
-
 
 
 

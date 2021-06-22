@@ -14,17 +14,17 @@ class Statistics extends StatefulWidget {
 
 class _StatisticsState extends State<Statistics> {
 
-  List<String> rawStaticSpiral = new List();
-  List<String> rawDynamicSpiral = new List();
-  List<String> rawStability = new List();
+  List<String> rawStaticSpiral = List.filled(0, "", growable: true);
+  List<String> rawDynamicSpiral = List.filled(0, "", growable: true);
+  List<String> rawStability = List.filled(0, "", growable: true);
 
   List<charts.Series<Values, int>> staticSpiralGraph;
   List<charts.Series<Values, int>> dynamicSpiralGraph;
   List<charts.Series<Values, int>> stabilityGraph;
 
-  List<Values> staticSpiralScores = new List();
-  List<Values> dynamicSpiralScores = new List();
-  List<Values> stabilityScores = new List();
+  List<Values> staticSpiralScores;
+  List<Values> dynamicSpiralScores;
+  List<Values> stabilityScores;
 
   @override
   void initState() {
@@ -33,13 +33,43 @@ class _StatisticsState extends State<Statistics> {
 
 
     _fillRawValues().then((onValue){
-      for(int i = 0; i < rawStaticSpiral.length; i++){
-        staticSpiralScores.add(new Values(i, double.parse(rawStaticSpiral[i])));
-        dynamicSpiralScores.add(new Values(i, double.parse(rawDynamicSpiral[i])));
-        stabilityScores.add(new Values(i, double.parse(rawStability[i])));
-      }
-
       setState(() {
+        Values placeholder = new Values(0, 0.0);
+        staticSpiralScores = List.filled(0, placeholder, growable: true);
+        dynamicSpiralScores = List.filled(0, placeholder, growable: true);
+        stabilityScores = List.filled(0, placeholder, growable: true);
+
+        for(int i = 0; i < rawStaticSpiral.length; i++){
+          if(double.parse(rawStaticSpiral[i]).isNaN){
+            staticSpiralScores.add(new Values(i, 0.0));
+          } else {
+            staticSpiralScores.add(new Values(i, double.parse(rawStaticSpiral[i])));
+          }
+
+          if(double.parse(rawDynamicSpiral[i]).isNaN){
+            dynamicSpiralScores.add(new Values(i, 0.0));
+          } else {
+            dynamicSpiralScores.add(new Values(i, double.parse(rawDynamicSpiral[i])));
+          }
+
+          if(double.parse(rawStability[i]).isNaN){
+            stabilityScores.add(new Values(i, 0.0));
+          } else {
+            stabilityScores.add(new Values(i, double.parse(rawStability[i])));
+          }
+        }
+        print("all scores");
+        staticSpiralScores.forEach((element) {
+          print(element.time.toString() + ": " + element.score.toString());
+        });
+        dynamicSpiralScores.forEach((element) {
+          print(element.time.toString() + ": " + element.score.toString());
+        });
+        stabilityScores.forEach((element) {
+          print(element.time.toString() + ": " + element.score.toString());
+        });
+
+
         staticSpiralGraph = [
           new charts.Series<Values, int>(
             id: 'Static Spiral Scores',
@@ -70,7 +100,6 @@ class _StatisticsState extends State<Statistics> {
           )
         ];
       });
-
     });
   }
 
@@ -84,20 +113,17 @@ class _StatisticsState extends State<Statistics> {
 
           appBar: PreferredSize(
             child: AppBar(
-              title: Text("Statistics", style: new TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 35,
-              )),
+              automaticallyImplyLeading: false,
+              title: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text("Statistics", style: new TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 35,
+                  )
+                )
+              ),
               backgroundColor: Colors.cyan[100],
-//            actions: <Widget>[
-//              IconButton(
-//                icon: Icon(Icons.info, color: Colors.blueAccent, size: 30),
-//                onPressed: (){
-//                  //_instructionsModal(context);
-//                },
-//              )
-//            ],
             ),
             preferredSize: Size.fromHeight(60),
           ),
@@ -105,28 +131,9 @@ class _StatisticsState extends State<Statistics> {
           body: ListView(
             children: <Widget>[
               Container(
-
-                child: LineChart(staticSpiralGraph),
-
-                margin: EdgeInsets.all(20),
-                padding: EdgeInsets.all(10),
-                height: 200,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Color.fromRGBO(142, 185, 173, 1),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-
-                child: LineChart(dynamicSpiralGraph),
+              child: (staticSpiralGraph!=null)?
+                LineChart(staticSpiralGraph, "Static Spiral Scores over time", "Time", "Score"):
+                Container(),
 
                 margin: EdgeInsets.all(20),
                 padding: EdgeInsets.all(10),
@@ -146,7 +153,31 @@ class _StatisticsState extends State<Statistics> {
               ),
               Container(
 
-                child: LineChart(stabilityGraph),
+                child: (dynamicSpiralGraph!=null)?
+                  LineChart(dynamicSpiralGraph, "Dynamic Spiral Scores over time", "Time", "Score"):
+                  Container(),
+
+                margin: EdgeInsets.all(20),
+                padding: EdgeInsets.all(10),
+                height: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  color: Color.fromRGBO(142, 185, 173, 1),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+
+                child: (stabilityGraph != null)?
+                  LineChart(stabilityGraph, "Stability Test Scores over time", "Time", "Score"):
+                  Container(),
 
                 margin: EdgeInsets.all(20),
                 padding: EdgeInsets.all(10),
@@ -195,6 +226,11 @@ class _StatisticsState extends State<Statistics> {
       rawDynamicSpiral = prefs.getStringList("DynamicSpiral");
       rawStability = prefs.getStringList("Stability");
     }
+
+    print("Raw Pref values");
+    print(rawStaticSpiral);
+    print(rawDynamicSpiral);
+    print(rawStability);
 
   }
 }

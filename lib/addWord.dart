@@ -33,20 +33,17 @@ class _AddWord extends State<AddWord> {
       child: Scaffold(
         appBar: PreferredSize(
           child: AppBar(
-            title: Text("Add Word", style: new TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 25,
-            )),
-            backgroundColor: Colors.cyan[100],
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.info, color: Colors.blueAccent, size: 30),
-                onPressed: (){
-                  //_instructionsModal(context);
-                },
+            automaticallyImplyLeading: false,
+            title: FittedBox(
+              fit: BoxFit.fitWidth,
+              child: Text("Add Word", style: new TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                )
               )
-            ],
+            ),
+            backgroundColor: Colors.cyan[100],
           ),
           preferredSize: Size.fromHeight(60),
         ),

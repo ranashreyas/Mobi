@@ -298,11 +298,16 @@ class _KeyboardState extends State<Keyboard> {
 
         appBar: PreferredSize(
           child: AppBar(
-            title: Text("Accesible Keyboard", style: new TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 25,
-            )),
+            automaticallyImplyLeading: false,
+            title: FittedBox(
+              fit: BoxFit.fitWidth,
+              child: Text("Accessible Keyboard", style: new TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 35,
+                )
+              ),
+            ),
             backgroundColor: Colors.cyan[100],
 //            actions: <Widget>[
 //              IconButton(
@@ -319,7 +324,6 @@ class _KeyboardState extends State<Keyboard> {
         body: ListView(
           children: <Widget>[
             Container(
-
               height: MediaQuery.of(context).size.width/6,
               width: MediaQuery.of(context).size.width,
 
@@ -406,9 +410,4 @@ class _KeyboardState extends State<Keyboard> {
       ),
     );
   }
-
-
-
-
-
 }

@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 class LineChart extends StatelessWidget {
   final List<charts.Series> seriesList;
   final bool animate;
+  final String title;
+  final String time;
+  final String scores;
 
-  LineChart(this.seriesList, {this.animate});
+  LineChart(this.seriesList, this.title, this.time, this.scores, {this.animate});
 
 //  /// Creates a [LineChart] with sample data and no transition.
 //  factory LineChart.withSampleData() {
@@ -22,16 +25,17 @@ class LineChart extends StatelessWidget {
     return new charts.LineChart(
       seriesList,
       animate: animate,
+
       behaviors: [
-        new charts.ChartTitle('Top title text',
+        new charts.ChartTitle(title,
             behaviorPosition: charts.BehaviorPosition.top,
             titleOutsideJustification: charts.OutsideJustification.start,
             innerPadding: 10),
-        new charts.ChartTitle('Bottom title text',
+        new charts.ChartTitle(time,
             behaviorPosition: charts.BehaviorPosition.bottom,
             titleOutsideJustification:
             charts.OutsideJustification.middleDrawArea),
-        new charts.ChartTitle('Start title',
+        new charts.ChartTitle(scores,
             behaviorPosition: charts.BehaviorPosition.start,
             titleOutsideJustification:
             charts.OutsideJustification.middleDrawArea),

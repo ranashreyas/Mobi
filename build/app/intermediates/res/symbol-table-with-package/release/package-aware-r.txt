@@ -1,3 +1,0 @@
-com.covidassistant.pdapp
-mipmap ic_launcher
-style LaunchTheme

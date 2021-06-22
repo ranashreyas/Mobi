@@ -25,7 +25,7 @@ class BottomNavBarState extends State<BottomNavBar> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             IconButton(
-              icon: Icon(Icons.library_books, color: Colors.black),
+              icon: Icon(Icons.scatter_plot_sharp, color: Colors.black),
 //                  title: Text('Mobility Tests'),
               color: Colors.cyan[100],
               onPressed: () {
