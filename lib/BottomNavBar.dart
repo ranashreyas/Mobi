@@ -59,9 +59,9 @@ class BottomNavBarState extends State<BottomNavBar> {
 //                  title: Text('Add Word'),
               color: Colors.cyan[100],
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AddWord()));
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(builder: (context) => AddWord()));
               },
             ),
           ]

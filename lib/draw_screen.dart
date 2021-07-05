@@ -129,6 +129,7 @@ class _DrawState extends State<Draw> {
 
   Timer _timer;
   int _start = 12;
+  int _startSecondsPassed = 0;
 
   void startTimer() {
     const oneSec = const Duration(seconds: 1);
@@ -137,7 +138,7 @@ class _DrawState extends State<Draw> {
           (Timer timer) {
         if (_start == 0) {
           setState(() {
-            _start=12;
+            _start=0;
             timer.cancel();
           });
         } else {
@@ -152,10 +153,22 @@ class _DrawState extends State<Draw> {
     );
   }
 
-  @override
-  void dispose() {
+  void startTimerSecondsPassed() {
+    _startSecondsPassed = 0;
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+        (Timer timer) {
+          setState(() {
+            _startSecondsPassed++;
+          }
+        );
+      },
+    );
+  }
+
+  dispose() {
     _timer.cancel();
-    super.dispose();
   }
 
   // the current time, in “seconds since the epoch”
@@ -209,7 +222,7 @@ class _DrawState extends State<Draw> {
           (staticSpiral!=2)?
             Container(
                 margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width*.77, MediaQuery.of(context).size.width*.05, 0, 0),
-                child: Text("$timeElapsed seconds passed", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
+                child: Text("$_startSecondsPassed seconds passed", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
             ):
             Container(),
 
@@ -346,8 +359,17 @@ class _DrawState extends State<Draw> {
                       previousTime = currentTimeMS();
                       startTime = previousTime;
 
-                      if(staticSpiral == 2)
+                      if(staticSpiral == 0){
+                        startTimerSecondsPassed();
+                      }
+
+                      if(staticSpiral == 1){
+                        startTimerSecondsPassed();
+                      }
+
+                      if(staticSpiral == 2){
                         startTimer();
+                      }
 
                       if(staticSpiral == 0) {
                         difference = 0;
@@ -369,8 +391,10 @@ class _DrawState extends State<Draw> {
                   },
                   onPanEnd: (details) {
                     setState(() {
+                      dispose();
 //                      print("points: " + points.length.toString() + " data: " + data.length.toString());
                       points.clear();
+                      _startSecondsPassed = 0;
 //                      print("end " + totalDistanceStability.toString());
 //                      dev = standardDeviation();
 //                      points.clear();
@@ -384,6 +408,7 @@ class _DrawState extends State<Draw> {
                         staticSpiral = 1;
                         randomNum = 10;
                       } else if(staticSpiral == 1){
+                        _start = 12;
                         staticSpiral = 2;
                         fillDynamicHistogramAngles();
                         dynamicSpiralTime = (currentTimeMS()-startTime).toDouble()/1000.0;
@@ -565,38 +590,15 @@ class _DrawState extends State<Draw> {
                             fontSize: 20,
                           )),
                         )) : Container()),
-                        // Container(
-                        //     margin: const EdgeInsets.fromLTRB(50, 0, 50, 0),
-                        //     decoration: BoxDecoration(
-                        //       color: Colors.grey[300],
-                        //       borderRadius: BorderRadius.circular(10),
-                        //       border: Border.all(
-                        //         color: Colors.black,
-                        //         width: 3,
-                        //       ),
-                        //     ),
-                        //     child: FlatButton(
-                        //       splashColor: Colors.cyan[100],
-                        //       child: Center(
-                        //           child: Text("Start Over", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
-                        //       ),
-                        //       onPressed: (){
-                        //         Navigator.push(
-                        //           context,
-                        //           MaterialPageRoute(builder: (context) => Draw()),
-                        //         );
-                        //       },
-                        //     )
-                        // ),
-                        (endedDrawing)?
-                        Padding(
-                          padding: EdgeInsets.only(top: 20.0),
-                          child: Container(
-                            height: 200,
-                            child: LineChart(temp, "Stability through the test", "Time", "Stability"),
-                          )
-                        ):
-                        Container(),
+                        // (endedDrawing)?
+                        // Padding(
+                        //   padding: EdgeInsets.only(top: 20.0),
+                        //   child: Container(
+                        //     height: 200,
+                        //     child: LineChart(temp, "Stability through the test", "Time", "Stability"),
+                        //   )
+                        // ):
+                        // Container(),
                         Container(
                           height: 50,
                         )

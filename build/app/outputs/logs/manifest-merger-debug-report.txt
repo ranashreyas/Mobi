@@ -24,7 +24,7 @@ INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/
 INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/debug/AndroidManifest.xml:1:1-7:12
 INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/debug/AndroidManifest.xml:1:1-7:12
 	package
-		ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:2:5-39
+		ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:2:5-36
 		INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml
 		INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/debug/AndroidManifest.xml
 	android:versionName
@@ -51,7 +51,7 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /Users/shre
 		ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:12:9-43
 	android:name
 		ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:10:9-57
-activity#com.covidassistant.pdapp.MainActivity
+activity#com.shreyasrana.pdapp.MainActivity
 ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:13:9-31:20
 	android:launchMode
 		ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:15:13-43

@@ -1,4 +1,4 @@
-com.covidassistant.pdapp
+com.shreyasrana.pdapp
 attr alpha
 attr font
 attr fontProviderAuthority

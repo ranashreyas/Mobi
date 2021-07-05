@@ -34,7 +34,7 @@ class StartState extends State<Start> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.asset("images/MobiTestLogo.jpeg",
+            Image.asset("images/MobiTestLogo.png",
               height: MediaQuery.of(context).size.width * 0.7,
               width: MediaQuery.of(context).size.width * 0.7,
 //              fit: BoxFit.fitWidth,
