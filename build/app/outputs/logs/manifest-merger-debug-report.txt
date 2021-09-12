@@ -1,57 +1,41 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:1:1-33:12
-INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:1:1-33:12
-INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:1:1-33:12
-INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:1:1-33:12
-MERGED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:1:1-33:12
-MERGED from [:shared_preferences] /Users/shreyas/Desktop/Shreyas/Programming/pd_app/build/shared_preferences/intermediates/merged_manifests/debug/processDebugManifest/merged/AndroidManifest.xml:2:1-7:12
-MERGED from [:sqflite] /Users/shreyas/Desktop/Shreyas/Programming/pd_app/build/sqflite/intermediates/merged_manifests/debug/processDebugManifest/merged/AndroidManifest.xml:2:1-7:12
-MERGED from [androidx.fragment:fragment:1.1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/fragment-1.1.0.aar/140ca9bcae941290d8d5be0730466170/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.activity:activity:1.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/activity-1.0.0.aar/5a6c7923be96b1c03ab1643de0c986ff/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/viewpager-1.0.0.aar/900f19de37a73b6b38bbc38b48f6fc90/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.loader:loader:1.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/loader-1.0.0.aar/2613121878326c3227e3cc903776553b/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.customview:customview:1.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/customview-1.0.0.aar/1f2bfdcc5cb5ee8d763e3b06b6c55408/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.core:core:1.1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/f836f985b0b532673729ee8dedad9b0c/AndroidManifest.xml:17:1-26:12
-MERGED from [androidx.lifecycle:lifecycle-runtime:2.2.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/lifecycle-runtime-2.2.0.aar/e11331b8ca9086b1ab10c5ff19d99b39/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.savedstate:savedstate:1.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/savedstate-1.0.0.aar/d00d0e0927f137023456063128a094f0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/lifecycle-livedata-2.0.0.aar/4346d294e33c905f58ec454b753949ac/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/lifecycle-livedata-core-2.0.0.aar/afc4573a8b1b9a1996fb4c1ffd0981fc/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.arch.core:core-runtime:2.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/core-runtime-2.0.0.aar/4ce6eb6cf9b842e70a8a72bccfbbcf3b/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/versionedparcelable-1.1.0.aar/71b7423008791ba78ac5b15ec7ac3365/AndroidManifest.xml:17:1-27:12
-MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/lifecycle-viewmodel-2.1.0.aar/5d97fa54ac331c62ebb0e25c1ec3a5ae/AndroidManifest.xml:17:1-22:12
+ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:1:1-50:12
+INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:1:1-50:12
+INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:1:1-50:12
+INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:1:1-50:12
+MERGED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:1:1-50:12
+MERGED from [io.flutter.plugins.sharedpreferences:shared_preferences_release:1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/shared_preferences_release-1.0.aar/154e96e26cbb8ca456baf20b93b92270/AndroidManifest.xml:2:1-7:12
+MERGED from [com.tekartik.sqflite:sqflite_release:1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/sqflite_release-1.0.aar/becc17c39bd4e075ea1bdecdb9dbf954/AndroidManifest.xml:2:1-7:12
+MERGED from [io.flutter.plugins.urllauncher:url_launcher_release:1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/url_launcher_release-1.0.aar/f35b492433844dac6cac37fa601486b8/AndroidManifest.xml:2:1-14:12
 INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/debug/AndroidManifest.xml:1:1-7:12
 INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/debug/AndroidManifest.xml:1:1-7:12
 INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/debug/AndroidManifest.xml:1:1-7:12
 	package
-		ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:2:5-36
+		ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:2:5-39
 		INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml
 		INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/debug/AndroidManifest.xml
 	android:versionName
 		INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml
-		ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:1:1-33:12
+		ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:1:1-50:12
 		INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/debug/AndroidManifest.xml
 	android:versionCode
 		INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml
-		ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:1:1-33:12
+		ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:1:1-50:12
 		INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/debug/AndroidManifest.xml
 	xmlns:android
 		ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:1:11-69
 application
 ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:9:5-32:19
-MERGED from [androidx.core:core:1.1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/f836f985b0b532673729ee8dedad9b0c/AndroidManifest.xml:24:5-89
-MERGED from [androidx.core:core:1.1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/f836f985b0b532673729ee8dedad9b0c/AndroidManifest.xml:24:5-89
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/versionedparcelable-1.1.0.aar/71b7423008791ba78ac5b15ec7ac3365/AndroidManifest.xml:24:5-25:19
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/versionedparcelable-1.1.0.aar/71b7423008791ba78ac5b15ec7ac3365/AndroidManifest.xml:24:5-25:19
-	android:appComponentFactory
-		ADDED from [androidx.core:core:1.1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/f836f985b0b532673729ee8dedad9b0c/AndroidManifest.xml:24:18-86
+MERGED from [io.flutter.plugins.urllauncher:url_launcher_release:1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/url_launcher_release-1.0.aar/f35b492433844dac6cac37fa601486b8/AndroidManifest.xml:7:5-12:19
+MERGED from [io.flutter.plugins.urllauncher:url_launcher_release:1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/url_launcher_release-1.0.aar/f35b492433844dac6cac37fa601486b8/AndroidManifest.xml:7:5-12:19
 	android:label
 		ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:11:9-33
 	android:icon
 		ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:12:9-43
 	android:name
 		ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:10:9-57
-activity#com.shreyasrana.pdapp.MainActivity
+activity#com.covidassistant.pdapp.MainActivity
 ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:13:9-31:20
 	android:launchMode
 		ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:15:13-43
@@ -81,40 +65,28 @@ category#android.intent.category.LAUNCHER
 ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:29:17-76
 	android:name
 		ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:29:27-74
+queries
+ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:33:5-49:15
+intent
+ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:35:9-38:18
+action#android.intent.action.VIEW
+ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:36:13-65
+	android:name
+		ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:36:21-62
+data
+ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:37:13-44
+	android:scheme
+		ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml:37:19-41
 uses-sdk
 INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml
 INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/main/AndroidManifest.xml
-MERGED from [:shared_preferences] /Users/shreyas/Desktop/Shreyas/Programming/pd_app/build/shared_preferences/intermediates/merged_manifests/debug/processDebugManifest/merged/AndroidManifest.xml:5:5-44
-MERGED from [:shared_preferences] /Users/shreyas/Desktop/Shreyas/Programming/pd_app/build/shared_preferences/intermediates/merged_manifests/debug/processDebugManifest/merged/AndroidManifest.xml:5:5-44
-MERGED from [:sqflite] /Users/shreyas/Desktop/Shreyas/Programming/pd_app/build/sqflite/intermediates/merged_manifests/debug/processDebugManifest/merged/AndroidManifest.xml:5:5-44
-MERGED from [:sqflite] /Users/shreyas/Desktop/Shreyas/Programming/pd_app/build/sqflite/intermediates/merged_manifests/debug/processDebugManifest/merged/AndroidManifest.xml:5:5-44
-MERGED from [androidx.fragment:fragment:1.1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/fragment-1.1.0.aar/140ca9bcae941290d8d5be0730466170/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.fragment:fragment:1.1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/fragment-1.1.0.aar/140ca9bcae941290d8d5be0730466170/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.activity:activity:1.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/activity-1.0.0.aar/5a6c7923be96b1c03ab1643de0c986ff/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.activity:activity:1.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/activity-1.0.0.aar/5a6c7923be96b1c03ab1643de0c986ff/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/viewpager-1.0.0.aar/900f19de37a73b6b38bbc38b48f6fc90/AndroidManifest.xml:20:5-44
-MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/viewpager-1.0.0.aar/900f19de37a73b6b38bbc38b48f6fc90/AndroidManifest.xml:20:5-44
-MERGED from [androidx.loader:loader:1.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/loader-1.0.0.aar/2613121878326c3227e3cc903776553b/AndroidManifest.xml:20:5-44
-MERGED from [androidx.loader:loader:1.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/loader-1.0.0.aar/2613121878326c3227e3cc903776553b/AndroidManifest.xml:20:5-44
-MERGED from [androidx.customview:customview:1.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/customview-1.0.0.aar/1f2bfdcc5cb5ee8d763e3b06b6c55408/AndroidManifest.xml:20:5-44
-MERGED from [androidx.customview:customview:1.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/customview-1.0.0.aar/1f2bfdcc5cb5ee8d763e3b06b6c55408/AndroidManifest.xml:20:5-44
-MERGED from [androidx.core:core:1.1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/f836f985b0b532673729ee8dedad9b0c/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.core:core:1.1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/core-1.1.0.aar/f836f985b0b532673729ee8dedad9b0c/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.lifecycle:lifecycle-runtime:2.2.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/lifecycle-runtime-2.2.0.aar/e11331b8ca9086b1ab10c5ff19d99b39/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.lifecycle:lifecycle-runtime:2.2.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/lifecycle-runtime-2.2.0.aar/e11331b8ca9086b1ab10c5ff19d99b39/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.savedstate:savedstate:1.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/savedstate-1.0.0.aar/d00d0e0927f137023456063128a094f0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.savedstate:savedstate:1.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/savedstate-1.0.0.aar/d00d0e0927f137023456063128a094f0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/lifecycle-livedata-2.0.0.aar/4346d294e33c905f58ec454b753949ac/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/lifecycle-livedata-2.0.0.aar/4346d294e33c905f58ec454b753949ac/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/lifecycle-livedata-core-2.0.0.aar/afc4573a8b1b9a1996fb4c1ffd0981fc/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/lifecycle-livedata-core-2.0.0.aar/afc4573a8b1b9a1996fb4c1ffd0981fc/AndroidManifest.xml:20:5-44
-MERGED from [androidx.arch.core:core-runtime:2.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/core-runtime-2.0.0.aar/4ce6eb6cf9b842e70a8a72bccfbbcf3b/AndroidManifest.xml:20:5-44
-MERGED from [androidx.arch.core:core-runtime:2.0.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/core-runtime-2.0.0.aar/4ce6eb6cf9b842e70a8a72bccfbbcf3b/AndroidManifest.xml:20:5-44
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/versionedparcelable-1.1.0.aar/71b7423008791ba78ac5b15ec7ac3365/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/versionedparcelable-1.1.0.aar/71b7423008791ba78ac5b15ec7ac3365/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/lifecycle-viewmodel-2.1.0.aar/5d97fa54ac331c62ebb0e25c1ec3a5ae/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/lifecycle-viewmodel-2.1.0.aar/5d97fa54ac331c62ebb0e25c1ec3a5ae/AndroidManifest.xml:20:5-44
+MERGED from [io.flutter.plugins.sharedpreferences:shared_preferences_release:1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/shared_preferences_release-1.0.aar/154e96e26cbb8ca456baf20b93b92270/AndroidManifest.xml:5:5-44
+MERGED from [io.flutter.plugins.sharedpreferences:shared_preferences_release:1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/shared_preferences_release-1.0.aar/154e96e26cbb8ca456baf20b93b92270/AndroidManifest.xml:5:5-44
+MERGED from [com.tekartik.sqflite:sqflite_release:1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/sqflite_release-1.0.aar/becc17c39bd4e075ea1bdecdb9dbf954/AndroidManifest.xml:5:5-44
+MERGED from [com.tekartik.sqflite:sqflite_release:1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/sqflite_release-1.0.aar/becc17c39bd4e075ea1bdecdb9dbf954/AndroidManifest.xml:5:5-44
+MERGED from [io.flutter.plugins.urllauncher:url_launcher_release:1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/url_launcher_release-1.0.aar/f35b492433844dac6cac37fa601486b8/AndroidManifest.xml:5:5-44
+MERGED from [io.flutter.plugins.urllauncher:url_launcher_release:1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/url_launcher_release-1.0.aar/f35b492433844dac6cac37fa601486b8/AndroidManifest.xml:5:5-44
 INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/debug/AndroidManifest.xml
 INJECTED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/debug/AndroidManifest.xml
 	android:targetSdkVersion
@@ -127,3 +99,11 @@ uses-permission#android.permission.INTERNET
 ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/debug/AndroidManifest.xml:6:5-66
 	android:name
 		ADDED from /Users/shreyas/Desktop/Shreyas/Programming/pd_app/android/app/src/debug/AndroidManifest.xml:6:22-64
+activity#io.flutter.plugins.urllauncher.WebViewActivity
+ADDED from [io.flutter.plugins.urllauncher:url_launcher_release:1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/url_launcher_release-1.0.aar/f35b492433844dac6cac37fa601486b8/AndroidManifest.xml:8:9-11:74
+	android:exported
+		ADDED from [io.flutter.plugins.urllauncher:url_launcher_release:1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/url_launcher_release-1.0.aar/f35b492433844dac6cac37fa601486b8/AndroidManifest.xml:10:13-37
+	android:theme
+		ADDED from [io.flutter.plugins.urllauncher:url_launcher_release:1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/url_launcher_release-1.0.aar/f35b492433844dac6cac37fa601486b8/AndroidManifest.xml:11:13-71
+	android:name
+		ADDED from [io.flutter.plugins.urllauncher:url_launcher_release:1.0] /Users/shreyas/.gradle/caches/transforms-1/files-1.1/url_launcher_release-1.0.aar/f35b492433844dac6cac37fa601486b8/AndroidManifest.xml:9:13-74

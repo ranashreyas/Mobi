@@ -7,10 +7,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:pdapp/BottomNavBar.dart';
 import 'package:pdapp/Statistics.dart';
+import 'package:pdapp/all-confetti.dart';
 import 'package:pdapp/suggestions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'LineChart.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -85,11 +87,15 @@ class _DrawState extends State<Draw> {
   double dynamicSpiralScore = 0;
 
   String equation = "-";
+  int previousTest = 0;
 
+  String finishTest = "None";
+  String finishTestInstructions = "None";
 
 
   void initState(){
     super.initState();
+
 
     staticSpiralScore = 0.0;
     dynamicSpiralScore = 0.0;
@@ -207,19 +213,41 @@ class _DrawState extends State<Draw> {
                 },
                 icon: Icon(Icons.refresh, color: Colors.blueAccent, size: 30)
               ),
-              IconButton(
-                icon: Icon(Icons.info, color: Colors.blueAccent, size: 30),
-                onPressed: (){
-                  _instructionsModal(context);
-                },
-              )
+              Container(
+                margin: EdgeInsets.only(right: 5),
+                decoration: BoxDecoration(
+                  color: Colors.blueAccent[100],
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 3,
+                  ),
+                ),
+                height: 20,
+                width: 75,
+                child: FlatButton(
+                  onPressed: (){
+                    _instructionsModal(context);
+                  },
+                  splashColor: Colors.blueAccent,
+                  child: Center(
+                    child: Text("Help", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                  )
+                )
+              ),
+              // IconButton(
+              //   icon: Icon(Icons.info, color: Colors.blueAccent, size: 30),
+              //   onPressed: (){
+              //     _instructionsModal(context);
+              //   },
+              // )
             ],
           ),
         preferredSize: Size.fromHeight(60),
       ),
       body: Stack(
         children: <Widget>[
-          (staticSpiral!=2)?
+          (staticSpiral!=2 && finishTest == "None")?
             Container(
                 margin: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width*.77, MediaQuery.of(context).size.width*.05, 0, 0),
                 child: Text("$_startSecondsPassed seconds passed", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
@@ -227,7 +255,7 @@ class _DrawState extends State<Draw> {
             Container(),
 
           //determining whether to do static/dynamic/stability
-          (staticSpiral == 0)?
+          (staticSpiral == 0 && finishTest == "None")?
             (Container(
               margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
               width: MediaQuery.of(context).size.width,
@@ -236,7 +264,7 @@ class _DrawState extends State<Draw> {
                 child: Image(image: AssetImage('images/spiral.jpeg')),
                 fit: BoxFit.fill
               )
-            )): (staticSpiral == 1)?(
+            )): (staticSpiral == 1 && finishTest == "None")?(
             (randomNum >8)?Container(
               margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
               width: MediaQuery.of(context).size.width,
@@ -249,39 +277,73 @@ class _DrawState extends State<Draw> {
               width: MediaQuery.of(context).size.width,
 
             )
-          ):Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Center(
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
+          ): (staticSpiral == 2 && finishTest == "None")?
+            (Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
 
-                    child:
-                      Text("Countdown: $_start", style: new TextStyle(
+                      child:
+                        Text("Countdown: $_start", style: new TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
+                        )
+                      )
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
+
+                      child: Text("Solve: " + equation, style: new TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 30,
                       )
+                    )),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 80, 0, 0),
+                      child: Icon(Icons.brightness_1, color: Colors.black, size: 10),
                     )
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
-
-                    child: Text("Solve: " + equation, style: new TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
-                    )
-                  )),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 80, 0, 0),
-                    child: Icon(Icons.brightness_1, color: Colors.black, size: 10),
-                  )
-                ],
+                  ],
+                )
               )
             )
-
+          ):
+          Container(
+              width: MediaQuery.of(context).size.width * .9,
+              height: MediaQuery.of(context).size.height,
+              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * .1),
+              child: Padding(
+                  padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                  child: Column(
+                    children: [
+                      Text(
+                        finishTest,
+                        style: TextStyle(fontSize: 35,
+                        fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        finishTestInstructions,
+                        style: TextStyle(fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      )
+                    ],
+                  )
+              )
           ),
+
+          (finishTest != "None")?
+          Container(
+              margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+              width: MediaQuery.of(context).size.width,
+
+              child: AllConfettiWidget(),
+          ):
+          Container(),
 
           Column(
             children: <Widget>[
@@ -338,7 +400,7 @@ class _DrawState extends State<Draw> {
 //                        print(currAngle);
                         angles.add(new Angles(((currentTime-startTime)).round(), currAngle));
                       }
-
+                      previousTest = staticSpiral;
                     });
                   },
                   onPanStart: (details) {
@@ -407,7 +469,18 @@ class _DrawState extends State<Draw> {
                         print("Time taken for Static Spiral Test: " + (staticSpiralTime).toString());
                         staticSpiral = 1;
                         randomNum = 10;
-                      } else if(staticSpiral == 1){
+                        setState(() {
+                          finishTest = "Static Spiral Test Complete!";
+                          finishTestInstructions = "Dynamic Spiral Test next. Instructions are below:";
+                        });
+                        Future.delayed(const Duration(milliseconds: 3000), () {
+                          setState(() {
+                            finishTest = "None";
+                          });
+                        });
+
+                      }
+                      else if(staticSpiral == 1){
                         _start = 12;
                         staticSpiral = 2;
                         fillDynamicHistogramAngles();
@@ -423,29 +496,34 @@ class _DrawState extends State<Draw> {
                           staticHistogramAngle[x] = 0;
                           dynamicHistogramAngle[x] = 0;
                         }
+                        setState(() {
+                          finishTest = "Dynamic Spiral Test Complete!";
+                          finishTestInstructions = "Stability Test next. Instructions are below:";
+                        });
+                        Future.delayed(const Duration(milliseconds: 3000), () {
+                          setState(() {
+                            finishTest = "None";
+                          });
+                        });
 
-                      } else {
+                      }
+                      else {
                         // endedDrawing = false;
                         timeElapsed = 0;
                         // dispose();
                         staticSpiral = 0;
                         _storeTestScores();
-                        // print(staticSpiralScore);
-                        // print(dynamicSpiralScore);
-                        // print(totalDistanceStability);
-                        //totalDistanceStability = 0;
+                        setState(() {
+                          finishTest = "Stability Test Complete!";
+                          finishTestInstructions = "All tests complete and saved. Results are below:";
+                        });
+                        Future.delayed(const Duration(milliseconds: 3000), () {
+                          setState(() {
+                            finishTest = "None";
+                          });
+                        });
 
                       }
-//                      temp = [
-//                        new charts.Series<GraphPoints, int>(
-//                          id: 'Sales',
-//                          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-//                          domainFn: (GraphPoints x, _) => x.time,
-//                          measureFn: (GraphPoints x, _) => x.acceleration,
-//                          data: data,
-//                        )
-//                      ];
-//                      points.add(null);
                       temp = [
                         new charts.Series<Angles, int>(
                           id: 'Sales',
@@ -706,6 +784,28 @@ class _DrawState extends State<Draw> {
 
         child: ListView(
           children: <Widget>[
+            Container(
+                margin: EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: Colors.blueAccent[100],
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 3,
+                  ),
+                ),
+                height: 40,
+                // width: 75,
+                child: FlatButton(
+                    onPressed: () async {
+                      await launch("https://youtu.be/7aBANSP4a5g");
+                    },
+                    splashColor: Colors.blueAccent,
+                    child: Center(
+                      child: Text("Video Demo", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                    )
+                )
+            ),
             Padding(
               padding: EdgeInsets.all(8.0),
               child: Text("This app will use three tests to gauge the severity of Parkinson's Disease. The test will automatically switch once the current test is finished. The spiral tests will determine the finger's tremor, and the stability test will test the finger's control.", style: new TextStyle(
